@@ -1,12 +1,141 @@
+{% set actualPage = app.request.attributes.get('_route') %}
 <!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
-    </body>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>{% block title %}Sans Titre{% endblock %} AsieDream</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    {% block stylesheets %}{% endblock %}
+</head>
+
+<body>
+
+   	<!-- debut du header -->
+	<header>
+            <!-- debut de la nav-bar bootstrap -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-danger p-3 ">
+                <img src="{{ asset('img/logo.jpg') }}"class="rounded-circle" alt="logo">
+                <li class="nav-item">
+                    <a class="navbar-brand" href="">AsiaDream</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{{ (actualPage == 'home') ? ' active' : '' }}" href="{{ path('home') }}">Accueil</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link{{ (actualPage == 'custom-travel') ? ' active' : '' }}" href="{{ path('custom-travel') }}">Voyage Personnalisé</a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link{{ (actualPage == 'travel-list') ? ' active' : '' }}" href="{{ path('travel-list') }}">Pays</a>
+                </li>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <!-- menu nav-bar -->
+            <form class="form-inline ml-auto pr-3 ">
+                <input class="form-control mr-sm-0" type="search" placeholder="Search">
+                <button class="btn btn-outline-success my-4 my-sm-2" type="submit">Search</button>
+            </form>
+        </nav>
+            <!-- fin de la nav-bar -->
+    </header>
+    {% block body %}{% endblock %}
+
+    <!-- Footer -->
+	<footer class="fixed-bottom page-footer font-small mdb-color bg-danger lighten-3 pt-4">
+		<!-- Footer Links -->
+		<div class="container text-center text-md-left">
+		  <!-- Grid row -->
+		  <div class="row">
+			<!-- Grid column -->
+			<div class="col-md-4 col-lg-3 mr-auto my-md-4 my-0 mt-4 mb-1">
+			  <!-- Content -->
+			  <h5 class="font-weight-bold text-uppercase mb-4">Edité par :</h5>
+				<p><strong>
+					- Ameur boubakar <br>
+					- Kadi mohamed <br> 
+					- Auclair jerome <br>
+					- Dubois manon <br>
+					- Nicolas jean-marc
+				</strong></p>
+			</div>
+			<!-- Grid column -->	  
+			<hr class="clearfix w-100 d-md-none">
+			<!-- Grid column -->
+			<div class="col-md-2 col-lg-2 mx-auto my-md-4 my-0 mt-4 mb-1">
+			  <!-- Links -->
+			  <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
+			  <ul class="list-unstyled">
+				<li>
+				  <p>
+					<a href="#!">ASIEDREAM</a>
+				  </p>
+				</li>
+			  </ul>
+			</div>
+			<!-- Grid column -->
+			<hr class="clearfix w-100 d-md-none">
+			<!-- Grid column -->
+			<div class="col-md-4 col-lg-3 mx-auto my-md-4 my-0 mt-4 mb-1">
+			  <!-- Contact details -->
+			 	<h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
+				<ul class="list-unstyled">
+				<li>
+					<p><i class="fas fa-home mr-3"></i> 12 rue de la fonderie, Le Creusot</p>
+				</li>
+				<li>
+				  <p><i class="fas fa-envelope mr-3"></i> info@example.com</p>
+				</li>
+				<li>
+				<p><i class="fas fa-phone mr-3"></i> + 01 23 45 67 88</p>
+				</li>
+			  </ul>
+			</div>
+				<!-- Grid column -->
+				<hr class="clearfix w-100 d-md-none">
+				<!-- Grid column -->
+			<div class="col-md-2 col-lg-2 text-center mx-auto my-4">
+				<!-- Social buttons -->
+				<h5 class="font-weight-bold text-uppercase mb-4">Follow Us</h5>
+				<!-- Facebook -->
+				<a type="button" class="btn-floating btn-fb">
+					<i class="fab fa-facebook-f"></i>
+				</a>
+				<!-- Twitter -->
+				<a type="button" class="btn-floating btn-tw">
+					<i class="fab fa-twitter"></i>
+				</a>
+				<!-- Google +-->
+				<a type="button" class="btn-floating btn-gplus">
+					<i class="fab fa-google-plus-g"></i>
+				</a>
+				<!-- Dribbble -->
+			  	<a type="button" class="btn-floating btn-dribbble">
+					<i class="fab fa-dribbble"></i>
+			 	 </a> <br>
+                <li class="nav-item">
+                    <a id="connexion" class="nav-link{{ (actualPage == 'connection') ? ' active' : '' }}" href="{{ path('connection') }}">Connexion</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link{{ (actualPage == 'contact') ? ' active' : '' }}" href="{{ path('contact') }}">contact</a>
+                </li>
+			</div>
+			<!-- Grid column -->
+		  </div>
+		  <!-- Grid row -->
+		</div>
+		<!-- Footer Links -->
+	</footer>
+	  <!-- Footer -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    {% block javascripts %}{% endblock %}
+</body>
+
 </html>

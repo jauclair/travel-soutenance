@@ -21,7 +21,7 @@ class MainController extends AbstractController{
 
     /**
     * @Route("personnalisez-votre-voyage", name="custom-travel")
-    * Page d'accueil du site
+    * Page formulaire de demande de voyage personnalisé
     */
     public function customTravel(){
 
@@ -29,7 +29,7 @@ class MainController extends AbstractController{
     }
 
     /**
-    * @Route("choisissez-votre-pays", name="travel-list")
+    * @Route("choisissez-votre-voyage", name="travel-list")
     * Page d'accueil du site
     */
     public function travelList(){
@@ -48,7 +48,7 @@ class MainController extends AbstractController{
 
     /**
     * @Route("connectez-vous", name="connection")
-    * Page du contact du site
+    * Page du connexion administrateur
     */
     public function connection(){
 
@@ -57,7 +57,7 @@ class MainController extends AbstractController{
 
     /**
     * @Route("sejour", name="travel-detail")
-    * Page du contact du site
+    * Page d'affichge du détail d'un voyage
     */
     public function travelDetail(){
 
@@ -66,7 +66,7 @@ class MainController extends AbstractController{
 
     /**
     * @Route("donnez-votre-avis", name="review")
-    * Page du contact du site
+    * Page permettant de donner un avis sur un voyage
     */
     public function review(){
 
@@ -75,11 +75,20 @@ class MainController extends AbstractController{
 
     /**
     * @Route("suivi-vol", name="flight ")
-    * Page du contact du site
+    * Page de suivi de vol (affichage d'une carte et positionnement gps d'un avion)
     */
     public function flight (){
 
         return $this->render('flight.html.twig');
     }
-    
+ 
+    /**
+    * @Route("ajout-voyage", name="travel-design")
+    * Page administrateur pour ajouter un voyage
+    */
+    public function travelDesign(){
+
+        return $this->render('travel-design.html.twig');
+    }
+
 }

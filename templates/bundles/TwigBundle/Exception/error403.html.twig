@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+
+     {# div container #}
+     <div class="container">
+            {# div error pour la couleur rouge du h1 #}
+            <div class="error">
+                {# div row #}
+                <div class="row col-12">
+                    <h1 class="col-12 text-center my-4">Erreur 403 !</h1>{# h1 #}
+                    {# div lead pour centrer le texte #}
+                    <div class="lead col-6 mx-auto">
+                        <p style="color: rgb(0, 0, 0) !important"> Dirigez vous vers :</p>
+                        <i class="far fa-hand-point-down"></i><br>
+                        <a "{{ (actualPage == 'home') ? ' active' : '' }}" href="{{ path('home') }}" style="color:blue !important">Accueil</a>
+                    </div>
+                    {# fin de la div lead  #}
+                </div>
+                {# fin de la div row #}
+            </div>
+            {# fin de la  div error pour la couleur rouge du h1 #}
+        </div>
+        {# fin div container #}
+{% endblock %}

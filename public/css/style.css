@@ -13,3 +13,17 @@ li{
 a, p, h2, h3, h4, h5, li{
     color: rgb(255, 216, 126) !important;
 }
+
+.active{
+    color: red;
+}
+
+.error{
+    color: red;
+}
+
+.lead{
+    text-align: center;
+}
+
+

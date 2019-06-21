@@ -29,11 +29,6 @@ class Flight
     private $flight_number;
 
     /**
-     * @ORM\Column(type="string", length=6)
-     */
-    private $icao24;
-
-    /**
      * @ORM\Column(type="string", length=150)
      */
     private $departure_airport;
@@ -54,7 +49,7 @@ class Flight
     private $arrival_date;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tour", mappedBy="flights")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tour", mappedBy="flight")
      */
     private $tours;
 
@@ -88,18 +83,6 @@ class Flight
     public function setFlightNumber(string $flight_number): self
     {
         $this->flight_number = $flight_number;
-
-        return $this;
-    }
-
-    public function getIcao24(): ?string
-    {
-        return $this->icao24;
-    }
-
-    public function setIcao24(string $icao24): self
-    {
-        $this->icao24 = $icao24;
 
         return $this;
     }

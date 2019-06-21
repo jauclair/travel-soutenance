@@ -44,13 +44,13 @@ class Accommodation
     private $country;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Tour", mappedBy="Accomodations")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Tour", inversedBy="accommodations")
      */
-    private $tours;
+    private $tour;
 
     public function __construct()
     {
-        $this->tours = new ArrayCollection();
+        $this->tour = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,16 +121,15 @@ class Accommodation
     /**
      * @return Collection|Tour[]
      */
-    public function getTours(): Collection
+    public function getTour(): Collection
     {
-        return $this->tours;
+        return $this->tour;
     }
 
     public function addTour(Tour $tour): self
     {
-        if (!$this->tours->contains($tour)) {
-            $this->tours[] = $tour;
-            $tour->addAccomodation($this);
+        if (!$this->tour->contains($tour)) {
+            $this->tour[] = $tour;
         }
 
         return $this;
@@ -138,9 +137,8 @@ class Accommodation
 
     public function removeTour(Tour $tour): self
     {
-        if ($this->tours->contains($tour)) {
-            $this->tours->removeElement($tour);
-            $tour->removeAccomodation($this);
+        if ($this->tour->contains($tour)) {
+            $this->tour->removeElement($tour);
         }
 
         return $this;

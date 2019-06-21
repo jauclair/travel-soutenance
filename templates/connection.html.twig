@@ -4,6 +4,41 @@
 
 {% block body %}
 
-<h1>PAGE CONNEXION</h1>
-
+<h1 class="col-12 text-center my-4">PAGE CONNEXION</h1>
+<!-- Formulaire connexion de l'admin-->
+<div class="bloc">
+    {# msg de succès #}
+    {% if success is defined %}
+        <p class="alert alert-success col-4 offset-4 text-center">Vous êtes bien connecté ! <a href="{{ path('home') }}">Cliquez ici pour poursuivre</a></p>
+    {% else %}
+    <form id="formConnection" class="col-12 col-md-4 offset-md-4" method="POST">        
+        <div class="form-group">
+            <label for="exampleInputEmail1">Votre email</label>
+            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="exemple@exemple.com" name="email">
+            <small id="emailHelp" class="form-text text-muted"></small>
+        </div>
+        {# msg d'erreur si email invalide #}
+        {% if errorsList.invalidEmail is defined %}
+            <p class="text-danger">Email invalide</p>
+        {% endif %}
+        {# msg d'erreur si l'admin n'existe pas #}
+        {% if errorsList.notExist is defined %}
+            <p class="text-danger">Compte inexistant</p>
+        {% endif %}
+        <div class="form-group">
+            <label for="exampleInputPassword1">Mot de passe</label>
+            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Mot de passe" name="password">
+        </div>
+        {# msg d'erreur si mot de passe invalide #}
+        {% if errorsList.invalidPassword is defined %}
+            <p class="text-danger">Mot de passe invalide</p>
+        {% endif %}
+        {# msg d'erreur si le mot de passe n'est pas le même que celui en BDD #}
+        {% if errorsList.badPassword is defined %}
+            <p class="text-danger">Mauvais mot de passe</p>
+        {% endif %}
+        <button type="submit" class="btn btn-danger col-12">Connexion</button>
+    </form>
+    {% endif %}
+</div>
 {% endblock %}

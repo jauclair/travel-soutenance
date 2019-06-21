@@ -69,6 +69,11 @@ class Tour
      */
     private $orders;
 
+    /**
+     * @ORM\Column(type="string", length=50)
+     */
+    private $image;
+
     public function __construct()
     {
         $this->flight = new ArrayCollection();
@@ -246,6 +251,18 @@ class Tour
                 $order->setTour(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): self
+    {
+        $this->image = $image;
 
         return $this;
     }

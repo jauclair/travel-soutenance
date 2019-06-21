@@ -124,11 +124,20 @@
                     <!-- Dribbble -->
                     <a type="button" class="btn-floating btn-dribbble">
                         <i class="fab fa-dribbble"></i>
-                    </a> <br>
+										</a> <br>
+										{% if app.session.has('account') %}
+										{# Si l'admin est connecter alors il voit le bouton deconnexion et ne voit plus le bouton connexion #}
                     <li class="nav-item">
+                        <a id="deconnexion" class="nav-link{{ (actualPage == 'logout') ? ' active' : '' }}"
+                            href="{{ path('logout') }}">Déconnexion</a>
+										</li>
+										{% else %}
+										{# Si l'admin est deconnecter  alors il voit le bouton connexion et ne voit plus le bouton déconnexion #}
+										<li class="nav-item">
                         <a id="connexion" class="nav-link{{ (actualPage == 'connection') ? ' active' : '' }}"
                             href="{{ path('connection') }}">Connexion</a>
-                    </li>
+										</li>
+										{% endif %}
                     <li class="nav-item">
                         <a class="nav-link{{ (actualPage == 'contact') ? ' active' : '' }}"
                             href="{{ path('contact') }}">contact</a>

@@ -16,7 +16,7 @@
 
    	<!-- debut du header -->
 	<header>
-            <!-- debut de la nav-bar bootstrap -->
+        <!-- debut de la nav-bar bootstrap -->
         <nav class="navbar navbar-expand-lg navbar-light bg-danger p-3 ">
                 <img src="{{ asset('img/logo.jpg') }}"class="rounded-circle" alt="logo">
                 <li class="nav-item">
@@ -27,11 +27,11 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link{{ (actualPage == 'custom-travel') ? ' active' : '' }}" href="{{ path('custom-travel') }}">Voyage Personnalisé</a>
+                    <a class="nav-link{{ (actualPage == 'custom-travel') ? ' active' : '' }}" href="{{ path('customTravel') }}">Voyage Personnalisé</a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link{{ (actualPage == 'travel-list') ? ' active' : '' }}" href="{{ path('travel-list') }}">Pays</a>
+                    <a class="nav-link{{ (actualPage == 'travel-list') ? ' active' : '' }}" href="{{ path('travelList') }}">Pays</a>
                 </li>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -47,7 +47,7 @@
     {% block body %}{% endblock %}
 
     <!-- Footer -->
-	<footer class="fixed-bottom page-footer font-small mdb-color bg-danger lighten-3 pt-4">
+	<footer class="page-footer font-small mdb-color bg-danger lighten-3 pt-4">
 		<!-- Footer Links -->
 		<div class="container text-center text-md-left">
 		  <!-- Grid row -->
@@ -117,10 +117,18 @@
 				<!-- Dribbble -->
 			  	<a type="button" class="btn-floating btn-dribbble">
 					<i class="fab fa-dribbble"></i>
-			 	 </a> <br>
-                <li class="nav-item">
+					</a> <br>	
+								{# Si l'admin est connecter alors il peut voir le bouton déconnexion et le bouton connexion disparait #}
+								{% if app.session.has('account') %}
+									<li class="nav-item">
+										<a id="logout" class="nav-link{{ (actualPage == 'logout') ? ' active' : '' }}" href="{{ path('logout') }}">Déconnexion</a>
+									</li>
+								{% else %}
+								{# Si l'admin n'est pas connecter alors il ne voit pas le bouton deconnexion et ne voit que le bouton connexion #}
+                	<li class="nav-item">
                     <a id="connexion" class="nav-link{{ (actualPage == 'connection') ? ' active' : '' }}" href="{{ path('connection') }}">Connexion</a>
-                </li>
+									</li>
+								{% endif %}
                 <li class="nav-item">
                     <a class="nav-link{{ (actualPage == 'contact') ? ' active' : '' }}" href="{{ path('contact') }}">contact</a>
                 </li>

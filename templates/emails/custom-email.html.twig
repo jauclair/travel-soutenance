@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Email voyage personnalisé</title>
+</head>
+<body>
+    <p>Pays ou nous souhaitons partir: {{ country }}</p>
+    <p>A la date du {{ departureDate }}</p>
+    <p>Et revenir à cette date {{ returnDate }}</p>
+    <p>Nous serons {{ groupNbr }}</p>
+    <p>Notre prix minimal est de {{ minPrice }}€</p>
+    <p>Et notre prix maximal est de {{ maxPrice }}€</p>
+    <p>Message complémentaire: </p>
+    <p>{{ message }}</p>
+</body>
+</html>

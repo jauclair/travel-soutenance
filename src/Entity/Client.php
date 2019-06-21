@@ -19,9 +19,9 @@ class Client
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=1)
+     * @ORM\Column(type="string", length=50)
      */
-    private $gender;
+    private $firstname;
 
     /**
      * @ORM\Column(type="string", length=50)
@@ -29,9 +29,9 @@ class Client
     private $lastname;
 
     /**
-     * @ORM\Column(type="string", length=50)
+     * @ORM\Column(type="string", length=1)
      */
-    private $firstname;
+    private $gender;
 
     /**
      * @ORM\Column(type="string", length=10)
@@ -39,7 +39,7 @@ class Client
     private $phone;
 
     /**
-     * @ORM\Column(type="string", length=10)
+     * @ORM\Column(type="string", length=10, nullable=true)
      */
     private $mobile;
 
@@ -49,29 +49,9 @@ class Client
     private $email;
 
     /**
-     * @ORM\Column(type="string", length=100)
+     * @ORM\Column(type="string", length=500)
      */
     private $adress;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $street;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $town;
-
-    /**
-     * @ORM\Column(type="string", length=5)
-     */
-    private $zipcode;
-
-    /**
-     * @ORM\Column(type="string", length=50)
-     */
-    private $country;
 
     /**
      * @ORM\Column(type="date")
@@ -89,7 +69,7 @@ class Client
     private $traveler_number;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="client_id", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="client", orphanRemoval=true)
      */
     private $orders;
 
@@ -103,14 +83,14 @@ class Client
         return $this->id;
     }
 
-    public function getGender(): ?string
+    public function getFirstname(): ?string
     {
-        return $this->gender;
+        return $this->firstname;
     }
 
-    public function setGender(string $gender): self
+    public function setFirstname(string $firstname): self
     {
-        $this->gender = $gender;
+        $this->firstname = $firstname;
 
         return $this;
     }
@@ -127,14 +107,14 @@ class Client
         return $this;
     }
 
-    public function getFirstname(): ?string
+    public function getGender(): ?string
     {
-        return $this->firstname;
+        return $this->gender;
     }
 
-    public function setFirstname(string $firstname): self
+    public function setGender(string $gender): self
     {
-        $this->firstname = $firstname;
+        $this->gender = $gender;
 
         return $this;
     }
@@ -156,7 +136,7 @@ class Client
         return $this->mobile;
     }
 
-    public function setMobile(string $mobile): self
+    public function setMobile(?string $mobile): self
     {
         $this->mobile = $mobile;
 
@@ -183,54 +163,6 @@ class Client
     public function setAdress(string $adress): self
     {
         $this->adress = $adress;
-
-        return $this;
-    }
-
-    public function getStreet(): ?string
-    {
-        return $this->street;
-    }
-
-    public function setStreet(string $street): self
-    {
-        $this->street = $street;
-
-        return $this;
-    }
-
-    public function getTown(): ?string
-    {
-        return $this->town;
-    }
-
-    public function setTown(string $town): self
-    {
-        $this->town = $town;
-
-        return $this;
-    }
-
-    public function getZipcode(): ?string
-    {
-        return $this->zipcode;
-    }
-
-    public function setZipcode(string $zipcode): self
-    {
-        $this->zipcode = $zipcode;
-
-        return $this;
-    }
-
-    public function getCountry(): ?string
-    {
-        return $this->country;
-    }
-
-    public function setCountry(string $country): self
-    {
-        $this->country = $country;
 
         return $this;
     }
@@ -283,7 +215,7 @@ class Client
     {
         if (!$this->orders->contains($order)) {
             $this->orders[] = $order;
-            $order->setClientId($this);
+            $order->setClient($this);
         }
 
         return $this;
@@ -294,8 +226,8 @@ class Client
         if ($this->orders->contains($order)) {
             $this->orders->removeElement($order);
             // set the owning side to null (unless already changed)
-            if ($order->getClientId() === $this) {
-                $order->setClientId(null);
+            if ($order->getClient() === $this) {
+                $order->setClient(null);
             }
         }
 

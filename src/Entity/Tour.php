@@ -39,7 +39,7 @@ class Tour
     private $arrival_date;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="integer")
      */
     private $traveler_group;
 
@@ -47,51 +47,6 @@ class Tour
      * @ORM\Column(type="integer")
      */
     private $price;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $transfer_price;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $cancel_price;
-
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $option_1_desc;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $option_1_price;
-
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $option_2_desc;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $option_2_price;
-
-    /**
-     * @ORM\Column(type="string", length=50, nullable=true)
-     */
-    private $option_3_desc;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $option_3_price;
-
-    /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="travel", orphanRemoval=true)
-     */
-    private $orders;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Country", inversedBy="tours")
@@ -102,18 +57,23 @@ class Tour
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Flight", inversedBy="tours")
      */
-    private $flights;
+    private $flight;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Accommodation", inversedBy="tours")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Accommodation", mappedBy="tour")
      */
-    private $Accomodations;
+    private $accommodations;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Order", mappedBy="tour", orphanRemoval=true)
+     */
+    private $orders;
 
     public function __construct()
     {
+        $this->flight = new ArrayCollection();
+        $this->accommodations = new ArrayCollection();
         $this->orders = new ArrayCollection();
-        $this->flights = new ArrayCollection();
-        $this->Accomodations = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -169,12 +129,12 @@ class Tour
         return $this;
     }
 
-    public function getTravelerGroup(): ?bool
+    public function getTravelerGroup(): ?int
     {
         return $this->traveler_group;
     }
 
-    public function setTravelerGroup(bool $traveler_group): self
+    public function setTravelerGroup(int $traveler_group): self
     {
         $this->traveler_group = $traveler_group;
 
@@ -189,133 +149,6 @@ class Tour
     public function setPrice(int $price): self
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    public function getTransferPrice(): ?int
-    {
-        return $this->transfer_price;
-    }
-
-    public function setTransferPrice(int $transfer_price): self
-    {
-        $this->transfer_price = $transfer_price;
-
-        return $this;
-    }
-
-    public function getCancelPrice(): ?int
-    {
-        return $this->cancel_price;
-    }
-
-    public function setCancelPrice(int $cancel_price): self
-    {
-        $this->cancel_price = $cancel_price;
-
-        return $this;
-    }
-
-    public function getOption1Desc(): ?string
-    {
-        return $this->option_1_desc;
-    }
-
-    public function setOption1Desc(?string $option_1_desc): self
-    {
-        $this->option_1_desc = $option_1_desc;
-
-        return $this;
-    }
-
-    public function getOption1Price(): ?int
-    {
-        return $this->option_1_price;
-    }
-
-    public function setOption1Price(int $option_1_price): self
-    {
-        $this->option_1_price = $option_1_price;
-
-        return $this;
-    }
-
-    public function getOption2Desc(): ?string
-    {
-        return $this->option_2_desc;
-    }
-
-    public function setOption2Desc(?string $option_2_desc): self
-    {
-        $this->option_2_desc = $option_2_desc;
-
-        return $this;
-    }
-
-    public function getOption2Price(): ?int
-    {
-        return $this->option_2_price;
-    }
-
-    public function setOption2Price(int $option_2_price): self
-    {
-        $this->option_2_price = $option_2_price;
-
-        return $this;
-    }
-
-    public function getOption3Desc(): ?string
-    {
-        return $this->option_3_desc;
-    }
-
-    public function setOption3Desc(?string $option_3_desc): self
-    {
-        $this->option_3_desc = $option_3_desc;
-
-        return $this;
-    }
-
-    public function getOption3Price(): ?int
-    {
-        return $this->option_3_price;
-    }
-
-    public function setOption3Price(int $option_3_price): self
-    {
-        $this->option_3_price = $option_3_price;
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Order[]
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(Order $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders[] = $order;
-            $order->setTravel($this);
-        }
-
-        return $this;
-    }
-
-    public function removeOrder(Order $order): self
-    {
-        if ($this->orders->contains($order)) {
-            $this->orders->removeElement($order);
-            // set the owning side to null (unless already changed)
-            if ($order->getTravel() === $this) {
-                $order->setTravel(null);
-            }
-        }
 
         return $this;
     }
@@ -335,15 +168,15 @@ class Tour
     /**
      * @return Collection|Flight[]
      */
-    public function getFlights(): Collection
+    public function getFlight(): Collection
     {
-        return $this->flights;
+        return $this->flight;
     }
 
     public function addFlight(Flight $flight): self
     {
-        if (!$this->flights->contains($flight)) {
-            $this->flights[] = $flight;
+        if (!$this->flight->contains($flight)) {
+            $this->flight[] = $flight;
         }
 
         return $this;
@@ -351,8 +184,8 @@ class Tour
 
     public function removeFlight(Flight $flight): self
     {
-        if ($this->flights->contains($flight)) {
-            $this->flights->removeElement($flight);
+        if ($this->flight->contains($flight)) {
+            $this->flight->removeElement($flight);
         }
 
         return $this;
@@ -361,24 +194,57 @@ class Tour
     /**
      * @return Collection|Accommodation[]
      */
-    public function getAccomodations(): Collection
+    public function getAccommodations(): Collection
     {
-        return $this->Accomodations;
+        return $this->accommodations;
     }
 
-    public function addAccomodation(Accommodation $accomodation): self
+    public function addAccommodation(Accommodation $accommodation): self
     {
-        if (!$this->Accomodations->contains($accomodation)) {
-            $this->Accomodations[] = $accomodation;
+        if (!$this->accommodations->contains($accommodation)) {
+            $this->accommodations[] = $accommodation;
+            $accommodation->addTour($this);
         }
 
         return $this;
     }
 
-    public function removeAccomodation(Accommodation $accomodation): self
+    public function removeAccommodation(Accommodation $accommodation): self
     {
-        if ($this->Accomodations->contains($accomodation)) {
-            $this->Accomodations->removeElement($accomodation);
+        if ($this->accommodations->contains($accommodation)) {
+            $this->accommodations->removeElement($accommodation);
+            $accommodation->removeTour($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Order[]
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders[] = $order;
+            $order->setTour($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->contains($order)) {
+            $this->orders->removeElement($order);
+            // set the owning side to null (unless already changed)
+            if ($order->getTour() === $this) {
+                $order->setTour(null);
+            }
         }
 
         return $this;

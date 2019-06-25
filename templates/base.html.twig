@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>{% block title %}Sans Titre{% endblock %} AsieDream</title>
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
@@ -64,11 +64,11 @@
                     <!-- Content -->
                     <h5 class="font-weight-bold text-uppercase mb-4">Edité par :</h5>
                     <p><strong>
-                            - Ameur boubakar <br>
-                            - Kadi mohamed <br>
-                            - Auclair jerome <br>
-                            - Dubois manon <br>
-                            - Nicolas jean-marc
+                            - Ameur Boubakar <br>
+                            - Kadi Mohamed <br>
+                            - Auclair Jérôme <br>
+                            - Dubois Manon <br>
+                            - Nicolas Jean-Marc
                         </strong></p>
                 </div>
                 <!-- Grid column -->
@@ -80,7 +80,7 @@
                     <ul class="list-unstyled">
                         <li>
                             <p>
-                                <a href="#!">ASIEDREAM</a>
+                                <a href="#!">ASIADREAM</a>
                             </p>
                         </li>
                     </ul>
@@ -93,7 +93,7 @@
                     <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
                     <ul class="list-unstyled">
                         <li>
-                            <p><i class="fas fa-home mr-3"></i> 12 rue de la fonderie, Le Creusot</p>
+                            <p><i class="fas fa-home mr-3"></i> 12 Rue de la Fonderie, Le Creusot</p>
                         </li>
                         <li>
                             <p><i class="fas fa-envelope mr-3"></i> info@example.com</p>
@@ -140,7 +140,7 @@
 										{% endif %}
                     <li class="nav-item">
                         <a class="nav-link{{ (actualPage == 'contact') ? ' active' : '' }}"
-                            href="{{ path('contact') }}">contact</a>
+                            href="{{ path('contact') }}">Contact</a>
                     </li>
                 </div>
                 <!-- Grid column -->

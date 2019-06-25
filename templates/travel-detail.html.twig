@@ -1,10 +1,43 @@
 {% extends "base.html.twig" %}
 
-{% block title %}sejour{% endblock %}
+{% block title %}Detail de Voyage{% endblock %}
 
 {% block body %}
 
-<h1>PAGE SEJOUR</h1>
+<div class="container mx-auto ">	
+    <h1 style="text-align: center">Detail de Voyage</h1>
+</div>
 
 
+   {#-- debut image #}
+	<figure class="h-50">
+		<img src="img/asie1.jpg" class="img-fluid max-weight-100 height-auto" alt="">
+	</figure>
+	 {#--- fin image #}
+     {#--- debut de la div container #}
+     
+{#--- boucle qui nous permet d'afficher Les details d'un Voyage #}	
+		<div class="container">	
+			<div class="row pl-5">	           
+                <div  class="col-12 col-md-6 px-4">
+                    <div class="bloc" class="card col-12 my-2">
+                            <img class="card-img-top" src="{{asset('img/'~tour.image) }}" >                       	
+                        <div class="card-body mb-5">
+                            <h4 class="card-title" style="text-align:center">{{ tour.title }}</h4>
+                            <p class="card-text" style="color:red">{{tour.image}} </p>
+                            <p style="color:red">{{tour.description}}</p>				 
+                            <p class="card-text" style="color:red">{{tour.price}} € </p>
+                            <p class="card-text" style="color:red">{{tour.getDepartureDate()|date("m/d/Y")}}</p>
+                            <p class="card-text" style="color:red">{{tour.getArrivalDate|date("m/d/Y")}}</p>
+                            <p class="card-text" style="color:red">{% if tour.getTravelerGroup() %}En groupe{% else %}{% endif %} </p>
+                        </div>
+                    </div>
+                </div>          
+			</div>
+		</div>
+	
 {% endblock %}
+
+
+
+			

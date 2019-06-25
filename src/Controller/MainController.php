@@ -15,18 +15,64 @@ use App\Entity\Tour;
 use \Swift_Mailer;
 use \Swift_Message;
 use App\Service\Recaptcha;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 
 class MainController extends AbstractController{
 /**
-* @Route("/accueil/", name="home")
+* @Route("/", name="home")
 * Page d'accueil du site
 */
 public function home(){
-    
+    $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
 
-    return $this->render('home.html.twig');
+    // $tours = $tourRepo->findAll();
+       
+    // //  on récupère la liste de tous les voyages en BDD
+    // $articleRepo = $this->getDoctrine()->getRepository(Tour::class);
+    // $tours = $tourRepo->findOneById(2);
+    // dump($tours);
+
+
+    // On récupère la liste des voyages
+    $tours = $tourRepo->findAll();
+    // On récupère le nombre de voyages
+    $max = count($tours) - 1;
+    // Table des id aléatoires
+    $randomId = [];
+    // Table des tours aléatoires
+    $randomTours = [];
+    // Nombre de tours aléatoire désirés
+    $nbRand = 4;
+    if($max > $nbRand){
+        // Selection aléatoire de $nbRand voyages
+        // $nbRand*4 essais cars rand peut retouner plusieurs
+        // fois le même nombre aléatoire
+        for ($i=0;$i<$nbRand*4;$i++) {
+            $rnd = rand(0, $max);
+            // Si l'd aléatoire n'est pas déja dans le tableau
+            // on l'ajoute
+            if (!in_array($rnd, $randomId)) {
+                $randomId[] = $rnd;
+                dump($rnd);
+                $randomTours[] = $tours[$rnd];
+                // Si on a trouvé $nbRand id, on sort de la boucle
+                if (count($randomTours) >= $nbRand)
+                    break;
+            }
+        }
+    }
+
+    // conversion les centimes en euro
+    $tours[0]->setPrice($tours[0]->getPrice()/100);
+        
+    // Afficher les vols d'une facon aleatoire :   $tours = $tourRepo->findOneById($tours.Id);
+
+        return $this->render('home.html.twig', ['tours' => $tours]);         
+        
 }
+
 
 /**
  * @Route("/personaliser-votre-voyage/", name="custom-travel")
@@ -119,12 +165,30 @@ public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $
 }
 
 /**
-* @Route("/choisissez-votre-pays/", name="travel-list")
+* @Route("/choisissez-votre-pays/{country}/", name="travel-list")
 * Page d'accueil du site
 */
-public function travelList(){
+public function travelList($country){
 
-    return $this->render('travel-list.html.twig');
+    //  on récupère la liste des voyages d'un pays de la BDD
+    $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
+    //  $country = $this->getDoctrine()->getRepository(Country::class);
+
+    $countryRepo = $this->getDoctrine()->getRepository(Country::class);
+
+    $country = $countryRepo->findOneByCountry($country);
+
+    if($country){
+        $tours = $tourRepo->findByCountry($country);  // faut creer une variable d'un pays precis
+     
+    
+        return $this->render('travel-list.html.twig', ['tours' => $tours]);
+
+    } else {
+        throw new NotFoundHttpException();
+    }
+
+    
 }
 
 
@@ -271,14 +335,36 @@ public function contact(Request $request, Swift_Mailer $mailer, Recaptcha $recap
     return $this->render('contact.html.twig');
 }
 
+
+
+
+
 /**
 * @Route("/sejour/", name="travelDetail")
 * Page du contact du site
 */
 public function travelDetail(){
 
-    return $this->render('travel-detail.html.twig');
+     //  On récupère les detailsd'un voyage de la BDD
+     $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
+
+     $tours = $tourRepo->findOneById('7');  
+    //  dump($tours);
+   
+   
+ 
+         return $this->render('travel-detail.html.twig', ['tour' => $tours]);
 }
+
+
+
+
+
+
+
+
+
+
 
 /**
 * @Route("/donnez-votre-avis/", name="review")

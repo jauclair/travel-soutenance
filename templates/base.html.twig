@@ -1,7 +1,6 @@
 {% set actualPage = app.request.attributes.get('_route') %}
 <!DOCTYPE html>
-<html lang="fr">
-
+<html lang="fr" class="h-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,12 +13,10 @@
         integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     {% block stylesheets %}{% endblock %}
 </head>
-
-<body>
-
+<body class="d-flex flex-column h-100">
     <!-- debut du header -->
     <header id="color">
-         <!-- debut de la nav-bar bootstrap -->
+        <!-- debut de la nav-bar bootstrap -->
         <nav class="navbar navbar-expand-lg navbar-light bg-danger">
             <img src="{{ asset('img/logo.jpg') }}" class="rounded-circle" alt="logo">
             <a class="navbar-brand" href="#">AsiaDream</a>
@@ -31,16 +28,21 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link{{ (actualPage == 'home') ? ' active' : '' }}" href="{{ path('home') }}">Accueil</a>
+                        <a class="nav-link{{ (actualPage == 'home') ? ' active' : '' }}"
+                            href="{{ path('home') }}">Accueil</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link{{ (actualPage == 'custom-travel') ? ' active' : '' }}"
                             href="{{ path('custom-travel') }}">Voyage Personnalisé</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link{{ (actualPage == 'travel-list') ? ' active' : '' }}"
-                            href="{{ path('travel-list') }}">Pays</a>
-                        </a>
+
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle {{ (actualPage == 'travel-list') ? ' active' : '' }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pays</a>
+                        <div class="dropdown-menu bg-danger" aria-labelledby="navbarDropdown">
+                            {% for country in datas.getCountries %}
+                                <a class="dropdown-item" href="{{path('travel-list', {country: country.country}) }}">{{ country.country }}</a>
+                            {% endfor %}
+                        </div>
                     </li>
                 </ul>
                 <form class="form-inline my-2 my-lg-0">
@@ -54,7 +56,7 @@
     {% block body %}{% endblock %}
 
     <!-- Footer -->
-    <footer class="page-footer font-small mdb-color bg-danger lighten-3 ">
+    <footer class="page-footer font-small mdb-color bg-danger lighten-3 mt-auto">
         <!-- Footer Links -->
         <div class="container text-center text-md-left">
             <!-- Grid row -->
@@ -74,17 +76,6 @@
                 <!-- Grid column -->
                 <hr class="clearfix w-100 d-md-none">
                 <!-- Grid column -->
-                <div class="col-md-2 col-lg-2 mx-auto my-md-4 my-0 mt-4 mb-1">
-                    <!-- Links -->
-                    <h5 class="font-weight-bold text-uppercase mb-4">About</h5>
-                    <ul class="list-unstyled">
-                        <li>
-                            <p>
-                                <a href="#!">ASIADREAM</a>
-                            </p>
-                        </li>
-                    </ul>
-                </div>
                 <!-- Grid column -->
                 <hr class="clearfix w-100 d-md-none">
                 <!-- Grid column -->
@@ -124,20 +115,20 @@
                     <!-- Dribbble -->
                     <a type="button" class="btn-floating btn-dribbble">
                         <i class="fab fa-dribbble"></i>
-										</a> <br>
-										{% if app.session.has('account') %}
-										{# Si l'admin est connecter alors il voit le bouton deconnexion et ne voit plus le bouton connexion #}
+                    </a> <br>
+                    {% if app.session.has('account') %}
+                    {# Si l'admin est connecter alors il voit le bouton deconnexion et ne voit plus le bouton connexion #}
                     <li class="nav-item">
                         <a id="deconnexion" class="nav-link{{ (actualPage == 'logout') ? ' active' : '' }}"
                             href="{{ path('logout') }}">Déconnexion</a>
-										</li>
-										{% else %}
-										{# Si l'admin est deconnecter  alors il voit le bouton connexion et ne voit plus le bouton déconnexion #}
-										<li class="nav-item">
+                    </li>
+                    {% else %}
+                    {# Si l'admin est deconnecter  alors il voit le bouton connexion et ne voit plus le bouton déconnexion #}
+                    <li class="nav-item">
                         <a id="connexion" class="nav-link{{ (actualPage == 'connection') ? ' active' : '' }}"
                             href="{{ path('connection') }}">Connexion</a>
-										</li>
-										{% endif %}
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link{{ (actualPage == 'contact') ? ' active' : '' }}"
                             href="{{ path('contact') }}">Contact</a>

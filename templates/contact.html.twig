@@ -4,7 +4,7 @@
 
 {% block body %}
 
-<h1 class="col-12 text-center my-4">PAGE CONTACT</h1>
+<h1 class="text-center my-4">PAGE CONTACT</h1>
 <div class="bloc">
     <div class="container" >
         <form method="POST" class=" col-6 mr-auto ml-auto mb-3">
@@ -36,7 +36,7 @@
                 {% if errorsList.captchaInvalid is defined %}
                      <p class="text-danger">Veuillez resoudre le Captcha</p>
                 {% endif %}
-            <button type="submit" class="btn btn-danger">Envoyer</button>
+            <button type="submit" class="btn btn-warning col-12">Envoyer</button>
             <!--Si tout à fonctionné, alors envoi d'unmessage de succès-->
             {% if success is defined %}
                 <p class="text-success">Mail envoyé avec succès</p>

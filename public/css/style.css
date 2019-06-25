@@ -26,4 +26,19 @@ a, p, h2, h3, h4, h5, li{
     text-align: center;
 }
 
+form{
+    color: rgb(255, 216, 126);
+    background-color:  	#dc3545;
+    border-radius: 3%;
+}
+
+.navbar .dropdown-item:hover{
+    background-color: black;
+}
+.navbar .dropdown-item:active{
+    background-color: black;
+}
+.navbar .dropdown-item:focus{
+    background-color: black;
+}
 

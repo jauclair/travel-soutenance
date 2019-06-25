@@ -19,7 +19,7 @@ use App\Service\Recaptcha;
 
 class MainController extends AbstractController{
 /**
-* @Route("/accueil/", name="home")
+* @Route("/", name="home")
 * Page d'accueil du site
 */
 public function home(){

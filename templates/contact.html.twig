@@ -1,13 +1,13 @@
 {% extends "base.html.twig" %}
 
-{% block title %}Contact{% endblock %}
+{% block title %}Contactez nous{% endblock %}
 
 {% block body %}
-
-<h1 class="col-12 text-center my-4">PAGE CONTACT</h1>
+{# formulaire de contact #}
+<h1 class="text-center">PAGE CONTACT</h1>
 <div class="bloc">
     <div class="container" >
-        <form method="POST" class=" col-6 mr-auto ml-auto mb-3">
+    <form method="POST" class=" col-6 mr-auto ml-auto mb-3">
             <div class="form-group w-100">
                 <label for="exampleInputEmail1">Email :</label>
                 <input type="email"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="Email">
@@ -32,11 +32,12 @@
                     <p class="text-danger">Veuillez envoyer un mail valide (entre 5 et 4000 caractères)</p>
                 {% endif %}
             </div>
+            <!--Incoporation du système de recaptcha et visualisation d'une erreur si il n'a pas été résolu-->
             <div class="g-recaptcha" data-sitekey="{{ recaptcha_public }}"></div>
                 {% if errorsList.captchaInvalid is defined %}
                      <p class="text-danger">Veuillez resoudre le Captcha</p>
                 {% endif %}
-            <button type="submit" class="btn btn-danger">Envoyer</button>
+            <button type="submit" class="btn btn-warning col-12">Envoyer</button>
             <!--Si tout à fonctionné, alors envoi d'unmessage de succès-->
             {% if success is defined %}
                 <p class="text-success">Mail envoyé avec succès</p>
@@ -44,9 +45,10 @@
         </form>
     </div>
 </div>
-{# formulaire de contact #}
+
 
 {% endblock %}
+{# Bloc de script du Recaptcha #}
 {% block javascripts %}
     <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

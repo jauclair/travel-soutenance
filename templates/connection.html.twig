@@ -4,14 +4,14 @@
 
 {% block body %}
 
-<h1 class="col-12 text-center my-4">PAGE CONNEXION</h1>
+<h1 class="text-center my-4">PAGE CONNEXION</h1>
 <!-- Formulaire connexion de l'admin-->
 <div class="bloc">
     {# msg de succès #}
     {% if success is defined %}
         <p class="alert alert-success col-4 offset-4 text-center">Vous êtes bien connecté ! <a href="{{ path('home') }}">Cliquez ici pour poursuivre</a></p>
     {% else %}
-    <form id="formConnection" class="col-12 col-md-4 offset-md-4" method="POST">        
+    <form id="formConnection" class="col-12 col-md-4 offset-md-4" method="POST" style="margin-bottom:  3% !important;">        
         <div class="form-group">
             <label for="exampleInputEmail1">Votre email</label>
             <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="exemple@exemple.com" name="email">
@@ -37,7 +37,7 @@
         {% if errorsList.badPassword is defined %}
             <p class="text-danger">Mauvais mot de passe</p>
         {% endif %}
-        <button type="submit" class="btn btn-danger col-12">Connexion</button>
+        <button type="submit" class="btn btn-warning col-12">Connexion</button>
     </form>
     {% endif %}
 </div>

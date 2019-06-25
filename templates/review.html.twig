@@ -1,9 +1,59 @@
 {% extends "base.html.twig" %}
 
 {% block title %}avis{% endblock %}
+{% block stylesheets %}    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .checked {
+            color: orange;
+        }
+    </style>
+{% endblock %}
 
 {% block body %}
+<div class="container">
+    <h1>PAGE AVIS</h1>
+</div>
 
-<h1>PAGE AVIS</h1>
+<h1 class="col-12 text-center my-4">PAGE AVIS</h1>
+    <div class="container" >   
+        <form method="POST" class=" col-6 mr-auto ml-auto mb-3">
+            <div class="form-group">
+                <h2>Quelle note donneriez vous à votre voyage ?</h2>
+                <span class="fa fa-star" id="star1" onclick="add(this,1)"></span>
+                <span class="fa fa-star" id="star2" onclick="add(this,2)"></span>
+                <span class="fa fa-star" id="star3" onclick="add(this,3)"></span>
+                <span class="fa fa-star" id="star4" onclick="add(this,4)"></span>
+                <span class="fa fa-star" id="star5" onclick="add(this,5)"></span>
+            </div>
+            <div class="form-group">
+                <label for="reviewTravel">Vous pouvez, si vous le souhaitez, donner des détails sur votre expérience: </label>
+                <textarea class="form-control" id="reviewTravel" rows="3" name="review" placeholder="Message"></textarea>
+            </div>
+            <button type="submit" class="btn btn-danger">Envoyer</button>
+        </form>
+        
+    
+    </div>
+{% block javascripts %}
+    <script>
+        function add(ths,sno){
+        
+        
+            for (var i=1;i<=5;i++){
+            var cur=document.getElementById("star"+i)
+            cur.className="fa fa-star"
+            }
+            
+            for (var i=1;i<=sno;i++){
+            var cur=document.getElementById("star"+i)
+            if(cur.className=="fa fa-star")
+            {
+            cur.className="fa fa-star checked"
+            }
+            }
+        
+        }
+    </script>
+{% endblock %}
 
 {% endblock %}

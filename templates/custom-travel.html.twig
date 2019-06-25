@@ -1,17 +1,17 @@
 {% extends "base.html.twig" %}
 
-{% block title %}personnalisé{% endblock %}
+{% block title %}Personnalisez votre voyage !{% endblock %}
 
 {% block body %}
 
-<h1 class="col-12 text-center my-4">page personnalisé</h1>
-<div class="bloc">
+<h1 class="text-center my-4">page personnalisé</h1>
+<div class="blok">
     <div class="container">
         {# msg de succès #}
         {% if success is defined %}
             <p class="alert alert-success col-4 offset-4 text-center">Votre demande de séjour à bien été prise en compte, nous reviendrons auprès de vous par mail <a href="{{ path('home') }}">Cliquez ici pour voir nos autres voyages</a></p>
         {% else %}
-        <form method="POST" class="col-6 mr-auto ml-auto">
+        <form method="POST" class="col-6 mr-auto ml-auto mb-3">
             <div class="form-group w-100">
                 <label for="exampleInputEmail1">Votre Email :</label>
                 <input type="email"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="Email">
@@ -95,10 +95,20 @@
                 <label for="ComplementaryInfo">Avez vous des informations supplémentaires à nous faire parvenir pour la recherche de votre voyage ?</label>
                 <textarea class="form-control" id="ComplementaryInfo" rows="3" name="message" placeholder="Message"></textarea>
             </div>
+            {# Incoporation du système de recaptcha et visualisation d'une erreur si il n'a pas été résolu #}
+            <div class="g-recaptcha" data-sitekey="{{ recaptcha_public }}">
+            </div>
+            {% if errorsList.captchaInvalid is defined %}
+                <p class="text-danger">Veuillez resoudre le Captcha</p>
+            {% endif %}
             <button type="submit" class="btn btn-danger">Envoyer</button>
 
         </form>
         {% endif %}
     </div>
 </div>
+{% endblock %}
+{# Bloc de script du Recaptcha #}
+{% block javascripts %}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
 {% endblock %}

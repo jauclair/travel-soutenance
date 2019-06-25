@@ -19,6 +19,16 @@ class FlightRepository extends ServiceEntityRepository
         parent::__construct($registry, Flight::class);
     }
 
+    public function findOneByFlightNumber($value): ?Flight
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.flight_number = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     // /**
     //  * @return Flight[] Returns an array of Flight objects
     //  */

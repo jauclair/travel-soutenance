@@ -3,32 +3,30 @@
 {% block title %}Accueil{% endblock %}
 
 {% block body %}
-
-   {#-- debut image #}
-	<figure >
-		<img src="../img/asie1.jpg" class="img-fluid max-weight-100 height-auto" alt="Responsive image">
-	</figure>
-     {#--- fin image #}     
-	 {#--- debut de la div container #}
-		<div class="container p-0">
-			 {#--- image inde et chine #}
-			<div class="row p-0">				
-                {% for tour in tours %}                
-					<div  class="col-12 col-md-6 px-4">
-						<div class="bloc" class="card col-12 my-2">
-								<img class="card-img-top" src="{{asset('img/'~tour.image) }}" > 							
-							<div class="card-body mb-5">
-								<h4 class="card-title" style="text-align:center">{{ tour.title }}</h4>
-								<p style="color:red">{{ tour.description }}</p>				 
-								<p class="card-text" style="color:red">{{tour.price}} € </p>							
-								<a href="{{ path('travelDetail') }}" class="btn btn-danger">En savoir plus + </a>
-							</div>
+<div class="container">
+    <h1>accueil</h1>
+</div>
+        
+	{#--- debut de la div container #}
+	<div class="container p-0">
+			{#--- image inde et chine #}
+		<div class="row p-0">				
+			{% for tour in tours %}                
+				<div  class="col-12 col-md-6 px-4">
+					<div class="bloc" class="card col-12 my-2">
+							<img class="card-img-top" src="{{asset('img/'~tour.image) }}" > 							
+						<div class="card-body mb-5">
+							<h4 class="card-title" style="text-align:center">{{ tour.title }}</h4>
+							<p style="color:red">{{ tour.description }}</p>				 
+							<p class="card-text" style="color:red">{{tour.price}} € </p>							
+							<a href="{{ path('travelDetail') }}" class="btn btn-danger">En savoir plus + </a>
 						</div>
 					</div>
-				{% endfor %}
-			</div>
+				</div>
+			{% endfor %}
 		</div>
-	
+	</div>
+
 {% endblock %}
 
 

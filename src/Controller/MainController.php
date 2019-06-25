@@ -32,7 +32,7 @@ public function home(){
  * @Route("/personaliser-votre-voyage/", name="custom-travel")
  * Page de voyage personaliser
  */
-public function customTravel(Request $request, Swift_Mailer $mailer){
+public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $recaptcha){
 
     //Si le formulaire a été cliqué
     if($request->isMethod('POST')){
@@ -46,6 +46,7 @@ public function customTravel(Request $request, Swift_Mailer $mailer){
     $minPrice = $request->request->get('minPrice');
     $maxPrice = $request->request->get('maxPrice');
     $message = $request->request->get('message');
+    $recaptchaCode = $request->request->get('g-recaptcha-response');
     
         //Bloc des vérifs
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
@@ -78,6 +79,10 @@ public function customTravel(Request $request, Swift_Mailer $mailer){
 
         if(!preg_match('#^.{0,8000}$#', $message)){
             $errors['invalideMessage'] = true;
+        }
+
+        if(!$recaptcha->isValid($recaptchaCode, $request->server->get('REMOTE_ADDR'))){
+            $errors['captchaInvalid'] = true;
         }
         
         //Si erreur

@@ -24,21 +24,13 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class MainController extends AbstractController{
 
-/**
-* @Route("/", name="root")
-* Page d'accueil du site
-*/
-public function root(){
-    
-
-    return $this->render('home.html.twig');
-}
 
 /**
 * @Route("/", name="home")
 * Page d'accueil du site
 */
 public function home(){
+
     $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
 
     // $tours = $tourRepo->findAll();
@@ -51,6 +43,7 @@ public function home(){
 
     // On récupère la liste des voyages
     $tours = $tourRepo->findAll();
+
     // On récupère le nombre de voyages
     $max = count($tours) - 1;
     // Table des id aléatoires

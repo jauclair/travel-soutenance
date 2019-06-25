@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Commande</title>
+</head>
+<body>
+    <h1>Votre commande à été prise en compte</h1>
+    <p>Merci de votre confiance</p>
+    <p>Voici le récapitulatif de votre commande</p>
+    <p>Vous avez reserver le voyage "{{ tour.title }}"</p>
+	<p>Vous partez le {{tour.DepartureDate|date('d/m/Y')}}</p>
+	<p>Vous revenez le {{tour.ArrivalDate|date('d/m/Y')}}</p>
+	<p>Et vous payerez {{tour.price}}€</p>
+	<p>Votre prénom: {{clientFirstname}}</p>
+	<p>Votre nom: {{clientLastname}}</p>
+	<p>Votre Email: {{clientEmail}}</p>
+	<p>Votre Adresse: {{clientAdress}}</p>
+    <p>Vous serez: {{clientGroupNbr}}</p>
+    <p>Vos documents sont en pièce jointe de ce mail</p>
+    <p>Nous vous souhaitons un bon voyage</p>
+
+</body>
+</html>

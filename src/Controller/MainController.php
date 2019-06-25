@@ -5,6 +5,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Config\Definition\Exception\Exception;
+use Symfony\Component\HttpFoundation\Session\Session;
 use App\Entity\Accommodation;
 use App\Entity\Admin;
 use App\Entity\Client;
@@ -15,6 +16,7 @@ use App\Entity\Tour;
 use \Swift_Mailer;
 use \Swift_Message;
 use App\Service\Recaptcha;
+use \DateTime;
 
 
 class MainController extends AbstractController{
@@ -294,7 +296,7 @@ public function review(){
 * @Route("suivi-vol", name="flight ")
 * Page de suivi de vol (affichage d'une carte et positionnement gps d'un avion)
 */
-public function flight (){
+public function flight(){
 
     return $this->render('flight.html.twig');
 }
@@ -308,4 +310,178 @@ public function travelDesign(){
     return $this->render('travel-design.html.twig');
 }
 
+/**
+ * @Route("/achat-voyage/", name="order")
+ * Page d'achat d'un voyage 
+ */
+public function order(Request $request){
+        
+        //Si le formulaire a été cliqué
+        if($request->isMethod('POST')){
+            //recuperation des données POST
+            $participate = $request->request->get('participate');
+            $groupNbr = $request->request->get('groupNbr');
+            $civility = $request->request->get('civility');
+            $lastname = $request->request->get('lastname');
+            $firstname = $request->request->get('firstname');
+            $country = $request->request->get('country');
+            $postCode = $request->request->get('postCode');
+            $city = $request->request->get('city');
+            $adress = $request->request->get('adress');
+            $email = $request->request->get('email');
+            $confirmEmail = $request->request->get('confirmEmail');
+            $phone1 = $request->request->get('phone1');
+            $phone2 = $request->request->get('phone2');
+            //Données du voyage sélectionner afficher sur la page même en cas d'erreur de remplissage du formulaire
+            $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
+            $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
+            $flight = $flightRepo->findOneById(1);
+            $tour = $tourRepo->findOneById(1);
+
+            //bloc des vérifs
+            if(is_bool($participate)){
+                $errors['invalidParticipate'] = true; 
+            }
+
+            if(empty($groupNbr)){
+                $errors['invalidGroupNbr'] = true;
+            }
+    
+            if(empty($civility)){
+                $errors['invalidCivility'] = true;
+            }
+            if(!preg_match('#^.{2,50}$#', $lastname)){
+                $errors['invalidLastname'] = true; 
+            }
+            if(!preg_match('#^.{2,50}$#', $firstname)){
+                $errors['invalidfirstname'] = true; 
+            }
+            if(!preg_match('#^.{2,50}$#', $country)){
+                $errors['invalidCountry'] = true; 
+            }
+            if(!preg_match('#^[0-9]{5}$#', $postCode)){
+                $errors['invalidPostCode'] = true; 
+            }
+            if(!preg_match('#^.{2,200}$#', $city)){
+                $errors['invalidCity'] = true; 
+            }
+            if(!preg_match('#^.{2,200}$#', $adress)){
+                $errors['invalidAdress'] = true; 
+            }
+            if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+                $errors['invalidEmail'] = true;
+            }
+            if($email != $confirmEmail){
+                $errors['invalidConfirmEmail'] = true;
+            }
+            if(!preg_match('#^[0-9]{10}$#', $phone1)){
+                $errors['invalidPhone1'] = true;
+            }
+            if(!preg_match('#^[0-9]{10}$#', $phone2)){
+                $errors['invalidPhone2'] = true;
+            }
+            //Si erreur
+            if(isset($errors)){
+                //retour de la vu avec les erreurs
+                return $this->render('order.html.twig', ['errorsList'=>$errors, 'tour' => $tour, 'flight' => $flight]);
+            //Sinon  
+            }else{
+                //Création d'un nouveau client dans la BDD
+                $clientRepo = $this->getDoctrine()->getRepository(Client::class);
+                $newClient = new Client();
+                $newClient
+                ->setFirstname($firstname)
+                ->setLastname($lastname)
+                ->setGender($civility)
+                ->setPhone($phone1)
+                ->setMobile($phone2)
+                ->setEmail($email)
+                ->setAdress($adress)
+                ->setParticipate($participate)
+                ->setBirthday(new DateTime())
+                ->setTravelerNumber($groupNbr)
+                ;
+                
+                //Envoyer les données en BDD
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($newClient);
+                $em->flush();
+
+                //Création d'une session pour l'envoie de l'email de confirmation pour la commande
+                $session = $this->get('session');
+                //Ajout de variables dans la session
+                $session->set('clientEmail', $email);
+                $session->set('clientFirstname', $firstname);
+                $session->set('clientLastname', $lastname);
+                $session->set('clientCivility', $civility);
+                $session->set('clientAdress', $adress);
+                $session->set('clientParticipate', $participate);
+                $session->set('clientGroupNbr', $groupNbr);
+                $session->set('tour', $tour);
+                $session->set('flight', $flight);
+
+                //Retour de la vu avec les données renseigner pour confirmation
+                return $this->render('order.html.twig', ['success'=> true, 'tour' => $tour, 'flight' => $flight, 'newClient' => $newClient]); 
+            }
+        }else{
+            //Données du voyage sélectionner afficher sur la page par défaut
+            $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
+            $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
+            $flight = $flightRepo->findOneById(1);
+            $tour = $tourRepo->findOneById(1);
+        
+            //Retour de la vu par défaut
+            return $this->render('order.html.twig', ['tour' => $tour, 'flight' => $flight]);
+        }
+}
+
+/**
+ * @Route("/donner-banquaire/", name="bankData")
+ * Page infos bancaire
+ */
+public function bankData(){
+     //Retour de la vu 
+    return $this->render('bankData.html.twig');
+}
+
+/** 
+ * @Route("/confirmation-commande/", name="confirmOrder")
+ * Page confirmation de commande
+ */
+public function confirmOrder(Swift_Mailer $mailer){
+    
+    //Récuperation de l'objet session
+    $session = $this->get('session');
+
+    //Récuperation des variables
+    $clientEmail = $session->get('clientEmail');
+    $clientFirstname = $session->get('clientFirstname');
+    $clientLastname = $session->get('clientLastname');
+    $clientCivility = $session->get('clientCivility');
+    $clientAdress = $session->get('clientAdress');
+    $clientParticipate = $session->get('clientParticipate');
+    $clientGroupNbr = $session->get('clientGroupNbr');
+    $clientTour = $session->get('tour');
+    $clientFlight = $session->get('flight');
+
+    //Crétion de l'email de confirmation
+    $message = (new Swift_Message('Confirmation et récapitulatif de votre commande'))
+                ->setFrom($clientEmail)
+                ->setTo('monsite@gmail.com')
+                ->setBody(
+                    $this->renderView('emails/order-email.html.twig',['clientEmail'=>$clientEmail, 'clientFirstname' => $clientFirstname, 'clientLastname' => $clientLastname, 'clientCivility' => $clientCivility, 'clientAdress' => $clientAdress, 'clientParticipate' => $clientParticipate, 'clientGroupNbr' => $clientGroupNbr, 'tour' => $clientTour, 'flight' => $clientFlight]),
+                    'text/html'
+                )
+                ->addPart(
+                    $this->renderView('emails/order-email.txt.twig',['clientEmail'=>$clientEmail, 'clientFirstname' => $clientFirstname, 'clientLastname' => $clientLastname, 'clientCivility' => $clientCivility, 'clientAdress' => $clientAdress, 'clientParticipate' => $clientParticipate, 'clientGroupNbr' => $clientGroupNbr, 'tour' => $clientTour, 'flight' => $clientFlight]),
+                    'text/plain'
+                )
+                ;
+    //Envoie de l'email
+    $mailer->send($message);
+    //Destruction de toute les variables dans la session
+    $session->clear();
+    //Retour de la vu            
+    return $this->render('confirmOrder.html.twig');
+}
 }

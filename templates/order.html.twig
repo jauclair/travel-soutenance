@@ -1,0 +1,198 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Achat séjour{% endblock %}
+
+{% block body %}
+
+<h1>PAGE ACHAT SÉJOUR 1</h1>
+<!--Si succès, alors on affiche un recapitulatif à l'utilisateur lui permettant de decider si es informations sont juste ou non -->
+{% if success is defined %}
+<div class="container">
+	<p>Vous avez reserver le voyage "{{ tour.title }}"</p>
+	<p>Vous partez le {{tour.DepartureDate|date('d/m/Y')}}</p>
+	<p>Vous revenez le {{tour.ArrivalDate|date('d/m/Y')}}</p>
+	<p>Et vous payerez {{tour.price}}€</p>
+	<p>Confirmez vos informations personnelles :</p>
+	<p>Votre prénom: {{newClient.FirstName}}</p>
+	<p>Votre nom: {{newClient.Lastname}}</p>
+	<p>Votre numéro de téléphone: {{newClient.Phone}}</p>
+	<p>Votre Email: {{newClient.Email}}</p>
+	<p>Votre Adresse: {{newClient.Adress}}</p>
+	<p>Vous serez: {{newClient.TravelerNumber}}</p>
+	<div class="d-flex flex-column flex-sm-row justify-content-center my-4"></div>
+		<!--Boutons dirigeant soit sur la page suivante, soit sur la page précédente en cas d'erreurs dans le remplissage du formulaire-->
+		<a href="{{ path('bankData') }}" type="submit" class="btn btn-success text-warning ">Confirmer votre commande</a>
+		<a href="{{ path('order') }}" type="submit" class="btn btn-danger text-warning">Annuler votre commande</a>
+	</div>
+</div>
+{% else %}
+<h2 class="text-center text-danger">Votre formule</h2>
+<div class="container">
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th scope="col">Aéroport d'arrivée</th>
+      <th scope="col">Aéroport de départ</th> 
+      <th scope="col">Départ</th>
+      <th scope="col">Retour</th>
+      <th scope="col">Prix TTC/Personne</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+		<!--Recapitulatif du voyage selectionné-->
+      <td scope="row">{{flight.ArrivalAirport}}</td>
+      <td>{{flight.DepartureAirport}}</td>
+      <td>{{flight.DepartureDate|date('d/m/Y')}}</td>
+      <td>{{flight.ArrivalDate|date('d/m/Y')}}</td>
+      <td>{{tour.price}}€</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<h2 class="text-center text-danger">Participants</h2>
+<form method="POST">
+	<div class="container">
+	<div class="form-group w-100">
+		<!--Booleen de participation au voyage-->
+		<label for="participate">Participez vous au voyage ?</label>	
+		<select class="form-control" id="participate" name="participate">
+			<option value="1">Oui</option>
+			<option value="0">Non</option>
+		</select>
+		
+	</div>
+	<!--Nombre de participant au voyage-->
+	<div class="form-group w-100">
+		<label for="groupNbr">Choisissez le nombre de participants :</label>
+		<select class="form-control" id="groupNbr" name="groupNbr">
+			<option selected>1</option>
+			<option>2</option>
+			<option>3</option>
+			<option>4</option>
+			<option>5</option>
+			<option>6</option>
+			<option>7</option>
+			<option>8</option>
+			<option>9</option>
+			<option>10</option>
+			<option>11</option>
+			<option>12</option>
+			<option>13</option>
+			<option>14</option>
+			<option>15</option>
+		</select>
+		<!--erreur si le champ est invalide-->
+		{% if errorsList.invalidGroupNbr is defined %}
+			<p class="text-danger">Veuillez sélectionnez un nombre</p>
+		{% endif %}
+		</div>
+		<h2 class="text-center text-danger">Coordonnées</h2>
+		<div class="d-flex flex-column flex-sm-row justify-content-center my-4">
+			<div class="form-group  col-4">
+				<label for="civility">Civilité</label>
+				<select class="form-control" name="civility" id="civility">
+					<option value="m">Monsieur</option>
+					<option value="f">Madame</option>
+				</select>
+				<!--erreur si le champ est invalide-->
+				{% if errorsList.invalidCivility is defined %}
+					<p class="text-danger">Veuillez sélectionnez une civilité</p>
+				{% endif %}
+				</div>
+				<div class="form-group  col-4">
+					<label for="lastname">Nom</label>
+					<input type="text" class="form-control" id="lastname" placeholder="Nom" name="lastname" >
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidLastname is defined %}
+						<p class="text-danger">Nom invalide</p>
+					{% endif %}
+				</div>
+				<div class="form-group  col-4">
+					<label for="firstname">Prénom</label>
+					<input type="text" class="form-control" id="firstname" placeholder="Prénom" name="firstname">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidfirstname is defined %}
+						<p class="text-danger">Prénom invalide</p>
+					{% endif %}
+				</div>
+				</div>
+				<div class="d-flex flex-column flex-sm-row justify-content-center my-4">
+				<div class="form-group  col-4">
+					<label for="country">Pays</label>
+					<input type="text" class="form-control" id="country" aria-describedby="emailHelp" placeholder="Pays" name="country">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidCountry is defined %}
+						<p class="text-danger">Pays invalide</p>
+					{% endif %}
+				</div>
+				<div class="form-group  col-4">
+					<label for="postCode">Code postal</label>
+					<input type="text" class="form-control" id="postCode" placeholder="Code postal" name="postCode">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidPostCode is defined %}
+						<p class="text-danger">Code postal invalide</p>
+					{% endif %}
+				</div>
+				<div class="form-group col-4">
+					<label for="city">Ville</label>
+					<input type="text" class="form-control" id="city" placeholder="Ville" name="city">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidCity is defined %}
+						<p class="text-danger">Ville invalide</p>
+					{% endif %}
+				</div>
+				</div>
+				<div class="d-flex flex-column flex-sm-row justify-content-center my-4">
+				<div class="form-group w-100">
+					<label for="adress">Adresse</label>
+					<input type="text" class="form-control" id="adress" aria-describedby="emailHelp" placeholder="Adresse" name="adress">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidAdress is defined %}
+						<p class="text-danger">Adresse invalide</p>
+					{% endif %}
+				</div>
+				</div>
+				<div class="d-flex flex-column flex-sm-row justify-content-center my-4">
+				<div class="form-group col-6">
+					<label for="email">Email</label>
+					<input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email" name="email">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidEmail is defined %}
+						<p class="text-danger">Email invalide</p>
+					{% endif %}
+				</div>
+				<div class="form-group col-6">
+					<label for="confirmEmail">Confirmation email</label>
+					<input type="email" class="form-control" id="confirmEmail" placeholder="Confirmation email" name="confirmEmail">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidConfirmEmail is defined %}
+						<p class="text-danger">Confirmation email invalide</p>
+					{% endif %}
+				</div>
+				</div>
+				<div class="d-flex flex-column flex-sm-row justify-content-center my-4">
+				<div class="form-group col-6">
+					<label for="phone1">Télephone 1</label>
+					<input type="text" class="form-control" id="phone1" aria-describedby="emailHelp" placeholder="Télephone 1" name="phone1">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidPhone1 is defined %}
+						<p class="text-danger">Télephone invalide</p>
+					{% endif %}
+				</div>
+				<div class="form-group col-6">
+					<label for="phone2">Télephone 2</label>
+					<input type="text" class="form-control" id="phone2" placeholder="Télephone 2" name="phone2">
+					<!--erreur si le champ est invalide-->
+					{% if errorsList.invalidPhone2 is defined %}
+						<p class="text-danger">Télephone invalide</p>
+					{% endif %}
+				</div>
+				</div>
+			
+			<button type="submit" class="btn btn-danger text-warning col-12 mb-3">Continuer</button>
+			
+		</div>
+</form>
+{% endif %}
+{% endblock %}

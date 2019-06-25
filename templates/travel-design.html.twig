@@ -3,7 +3,390 @@
 {% block title %}ajouter{% endblock %}
 
 {% block body %}
+    <div class="container">
+        <div class="row">
+            <h1 class="col-12 text-center my-4">Créer un pays - Un vol - Un hébergement - Un voyage</h1>
+        </div>
 
-<h1>PAGE AJOUTER</h1>
+        <div class="row">
+            {# Message de succes pour l'ajout de pays #}
+            {% if successCountry is defined %}
+                <p class="alert text-success col-12 text-center">Le pays à été ajouté</p>
+            {% endif %}
+            {# Message de succes pour l'ajout d'hébergement #}
+            {% if successAccommodation is defined %}
+                <p class="alert text-success col-12 text-center">L'hébergement' à été ajouté</p>
+            {% endif %}
+            {# Message de succes pour l'ajout de vol #}
+            {% if successFlight is defined %}
+                <p class="alert text-success col-12 text-center">Le vol à été ajouté</p>
+            {% endif %}
+            {# Message de succes pour l'ajout de voyage #}
+            {% if successTour is defined %}
+                <p class="alert text-success col-12 text-center">Le voyage à été ajouté</p>
+            {% endif %}
+            {# Message de succes pour l'ajout d'un administrateur #}
+            {% if successAdmin is defined %}
+                <p class="alert text-success col-12 text-center">L'administrateur' à été ajouté</p>
+            {% endif %}
 
+            {# Formulaire d'ajout d'un vol
+               Si une erreur s'est produite sur un formulaire envoyé
+               Les autres formulaires ne sont plus affichés
+            #}
+            {% if not errorsList.accommodationForm is defined
+                and not errorsList.tourForm  is defined
+                and not errorsList.countryForm is defined
+                and not errorsList.adminForm is defined
+            %}
+                <form class="col-12 col-md-6" method="POST">
+                    <fieldset class="border p-2">
+                        <legend  class="w-auto">Ajouter un vol</legend>
+                            <div class="form-group">
+                        <div class="form-group">
+                            <label for="companyName">Ajouter le nom de la compagnie</label>
+                            <input type="text" class="form-control" id="companyName" name="companyName" placeholder="Nom de la compagnie">
+                        </div>
+                        {# Si l'erreur companyNameInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.companyNameInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier le nom de la compagnie aérienne (entre 1 et 50 caractères)</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="flightnum">Ajouter le N° de vol</label>
+                            <input type="text" class="form-control" id="flightnum" name="flightnum" placeholder="N° de vol">
+                        </div>
+                        {# Si l'erreur flightNumInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.flightNumInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier le n° de vol (entre 1 et 50 caractères)</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="departureAirport">Aéroport de départ</label>
+                            <input type="text" class="form-control" id="departureAirport" name="departureAirport" placeholder="Nom aéroport">
+                        </div>
+                        {# Si l'erreur departureAirportInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.departureAirportInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier l'aéroport de départ (entre 1 et 150 caractères)</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="arrivalAirport">Aéroport d'arrivée</label>
+                            <input type="text" class="form-control" id="arrivalAirport" name="arrivalAirport" placeholder="Nom aéroport">
+                        </div>
+                        {# Si l'erreur arrivalAirportInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.arrivalAirportInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier l'aéroport d'arrivée (entre 1 et 150 caractères)</p>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-12 col-md-5">
+                                <div class="form-group">
+                                    <label for="departureDate">Date de départ yyyy-mm-dd</label>
+                                    <input type="date" class="form-control" id="departureDate" name="departureDate" placeholder="Date du vol">
+                                </div>
+                                {# Si l'erreur departureDateInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.departureDateInvalid is defined %}
+                                    <p class="text-danger">Veuillez spécifier la date de départ yyyy-mm-dd</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-5">
+                                <div class="form-group">
+                                    <label for="arrivalDate">Date d'arrivée yyyy-mm-dd</label>
+                                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate" placeholder="Date du vol">
+                                </div>
+                                {# Si l'erreur arrivalDateInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.arrivalDateInvalid is defined %}
+                                    <p class="text-danger">Veuillez spécifier la date d'arrivée yyyy-mm-dd</p>
+                                {% endif %}
+                                {# Si l'erreur datesInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.datesInvalid is defined %}
+                                    <p class="text-danger">Veuillez spécifier une date d'arrivée > à la date de départ</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <!-- name sur le bouton permet de discriminer le formulaire -->
+                        <button type="submit" class="btn btn-primary" name={{ button.flight }}>Ajouter un vol</button>
+                    </fieldset>
+                </form>
+            {% endif %}
+            {# Formulaire d'ajout d'un hébergement
+               Si une erreur s'est produite sur un formulaire envoyé
+               Les autres formulaires ne sont plus affichés
+            #}
+            {% if not errorsList.flightForm is defined
+                and not errorsList.tourForm  is defined
+                and not errorsList.countryForm is defined
+                and not errorsList.adminForm is defined
+            %}
+                <form class="col-12 col-md-6" method="POST">
+                    <fieldset class="border p-2">
+                        <legend  class="w-auto">Ajouter un hébergement</legend>
+                        <div class="form-group">
+                        <div class="form-group">
+                            <label for="name">Ajouter le nom de l'hébergement</label>
+                            <input type="text" class="form-control" id="name"  name="name" placeholder="Nom">
+                        </div>
+                        {# Si l'erreur nameInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.nameInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier le nom de l'hébergement (entre 1 et 50 caractères)</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="phone">Ajouter le N° de téléphone</label>
+                            <input type="text" class="form-control" id="phone" name="phone" placeholder="N° de téléphone">
+                        </div>
+                        {# Si l'erreur phoneInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.phoneInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier le n° de téléphone</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                        </div>
+                        {# Si l'erreur emailInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.emailInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier un email</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="address">Adresse</label>
+                            <input type="text" class="form-control" id="address" name="address" placeholder="Adresse">
+                        </div>
+                        {# Si l'erreur addressInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.addressInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier une adresse (entre 1 et 100 caractères)</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <label for="country">Pays</label><br />
+                            <select name="country" id="country">
+                                {% for country in countries %}
+                                    <option value="{{ country.country|e }}">{{ country.country|e }}</option>
+                                {% endfor %}
+                            </select>
+                            {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
+                            {% if errorsList.countryInvalid is defined %}
+                                <p class="text-danger">Veuillez sélectionner pays</p>
+                            {% endif %}
+                        </div>
+                        <!-- name sur le bouton permet de discriminer le formulaire -->
+                        <button type="submit" class="btn btn-primary" name={{ button.accommodation }}>Ajouter un hébergement</button>
+                    </fieldset>
+                </form>
+            {% endif %}
+            {# Formulaire d'ajout d'un voyage
+               Si une erreur s'est produite sur un formulaire envoyé
+               Les autres formulaires ne sont plus affichés
+            #}
+            {% if not errorsList.flightForm is defined
+                and not errorsList.accommodationForm is defined
+                and not errorsList.countryForm is defined
+                and not errorsList.adminForm is defined
+            %}
+                <form class="col-12 col-md-6" method="POST" enctype="multipart/form-data">
+                    <fieldset class="border p-2">
+                        <legend  class="w-auto">Ajouter un voyage</legend>
+                            <div class="form-group">
+                        <div class="form-group">
+                            <label for="title">Ajouter le titre du voyage</label>
+                            <input type="text" class="form-control" id="title" name="title" placeholder="Tire du voyage">
+                        </div>
+                        {# Si l'erreur titleInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.titleInvalid is defined %}
+                            <p class="text-danger">Veuillez ajouter un titre</p>
+                        {% endif %}
+                        <div class="form-group">
+                          <label for="description">Description du voyage</label>
+                          <textarea class="form-control" rows="5" id="description" name="description" placeholder="Description du voyage"></textarea>
+                        </div>
+                        {# Si l'erreur descriptionInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.descriptionInvalid is defined %}
+                            <p class="text-danger">Veuillez ajouter une description du voyage</p>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-12 col-md-5">
+                                <div class="form-group">
+                                    <label for="departureDate">Date de départ yyyy-mm-dd</label>
+                                    <input type="date" class="form-control" id="departureDate" name="departureDate" placeholder="Date du vol">
+                                </div>
+                                {# Si l'erreur departureDateInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.departureDateInvalid is defined %}
+                                    <p class="text-danger">Veuillez spécifier la date de départ yyyy-mm-dd</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-5">
+                                <div class="form-group">
+                                    <label for="arrivalDate">Date de retour yyyy-mm-dd</label>
+                                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate" placeholder="Date du vol">
+                                </div>
+                                {# Si l'erreur arrivalDateInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.arrivalDateInvalid is defined %}
+                                    <p class="text-danger">Veuillez spécifier la date de retour yyyy-mm-dd</p>
+                                {% endif %}
+                                {# Si l'erreur datesInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.datesInvalid is defined %}
+                                    <p class="text-danger">Veuillez spécifier une date d'arrivée > à la date de départ</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="checkbox">
+                            <label for="group">Groupe</label>
+                            <input type="checkbox" id="group" name="group" placeholder="Voyage en groupe">
+                        </div>
+                        <div class="form-group">
+                            <label for="country">Pays</label><br />
+                            <select name="country" id="country">
+                                {% for country in countries %}
+                                    <option value="{{ country.country|e }}">{{ country.country|e }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.countryInvalid is defined %}
+                            <p class="text-danger">Veuillez sélectionner un pays</p>
+                        {% endif %}
+                        <div class="row">
+                            <div class="col-12 col-md-5">
+                                <div class="form-group">
+                                    <label for="flight">Vol</label><br />
+                                    <select name="flight" id="flight">
+                                        {% for flight in flights %}
+                                            <option value="{{ flight.flightNumber|e }}">{{ flight.flightNumber|e }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {# Si l'erreur flightInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.flightInvalid is defined %}
+                                    <p class="text-danger">Veuillez sélectionner un vol</p>
+                                {% endif %}
+                            </div>
+                            <div class="col-12 col-md-5">
+                                <div class="form-group">
+                                    <label for="accommodation">Hébergement</label><br />
+                                    <select name="accommodation" id="accommodation">
+                                        {% for accommodation in accommodations %}
+                                            <option value="{{ accommodation.name|e }}">{{ accommodation.name|e }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                {# Si l'erreur accommodationInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.accommodationInvalid is defined %}
+                                    <p class="text-danger">Veuillez sélectionner un hébergement</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="price">Prix du voyage</label>
+                            <input type="number" class="form-control" id="price" name="price" placeholder="1200.22">
+                        </div>
+                        {# Si l'erreur priceInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.priceInvalid is defined %}
+                            <p class="text-danger">Veuillez spécifier le prix</p>
+                        {% endif %}
+                        <div class="form-group">
+                            <div class="custom-file">
+                                <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
+                                <input type="file" class="custom-file-input" id="inputFile" name="inputFile">
+                                <label class="custom-file-label" for="inputFile">Selectionnez une image</label>
+                            </div>
+                        </div>
+                        {# Si l'erreur inputFileInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.inputFileInvalid is defined %}
+                            <p class="text-danger">Veuillez sélectionner une image</p>
+                        {% endif %}
+                        {# Si l'erreur inputFileError existe, alors affiche d'une erreur #}
+                        {% if errorsList.inputFileError is defined %}
+                            <p class="text-danger">Veuillez sélectionner une image jpg ou png d'une taille maxi {{ maxSize }}</p>
+                        {% endif %}
+                        <!-- name sur le bouton permet de discriminer le formulaire -->
+                        <button type="submit" class="btn btn-primary" name={{ button.tour }}>Ajouter un voyage</button>
+                    </fieldset>
+                </form>
+            {% endif %}
+        {# Formulaire d'ajout d'un pays
+           Si une erreur s'est produite sur un formulaire envoyé
+           Les autres formulaires ne sont plus affichés
+        #}
+        <div class="col-12 col-md-6">
+        {% if not errorsList.flightForm is defined
+            and not errorsList.accommodationForm is defined
+            and not errorsList.tourForm  is defined
+            and not errorsList.adminForm is defined
+        %}
+            <form method="POST">
+                <fieldset class="border p-2">
+                    <legend  class="w-auto">Ajouter un pays</legend>
+                    <div class="form-group">
+                        <label for="country">Ajouter un pays</label>
+                        <input type="text" class="form-control" id="country" name="country" placeholder="Entrez un nom de pays">
+                    </div>
+                    {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
+                    {% if errorsList.countryInvalid is defined %}
+                        <p class="text-danger">Veuillez spécifier un nom de pays (entre 1 et 50 caractères)</p>
+                    {% endif %}
+                    {# Si l'erreur countryAlready existe, alors affcihe d'une erreur #}
+                    {% if errorsList.countryAlready is defined %}
+                        <p class="text-danger">Ce pays est déja présent dans la base de données</p>
+                    {% endif %}
+                    {# name sur le bouton permet de discriminer le formulaire #}
+                    <button type="submit" class="btn btn-primary" name={{ button.country }}>Ajouter un pays</button>
+                </fieldset>
+            </form>
+        {% endif %}
+        {# Formulaire d'ajout d'un administrateur
+           Si une erreur s'est produite sur un formulaire envoyé
+           Les autres formulaires ne sont plus affichés
+        #}
+        {% if not errorsList.flightForm is defined
+            and not errorsList.accommodationForm is defined
+            and not errorsList.tourForm  is defined
+            and not errorsList.countryForm is defined
+        %}
+            <form method="POST">
+                <fieldset class="border p-2">
+                    <legend  class="w-auto">Ajouter un administrateur</legend>
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                    </div>
+                    <div class="form-group">
+                        <label for="password">Mot de passe</label>
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Mot de passe">
+                    </div>
+                    <div class="form-group">
+                        <label for="confirm">Confirmation du mot de passe</label>
+                        <input type="password" class="form-control" id="confirm" name="confirm" placeholder="Confirmation mot de passe">
+                    </div>
+                    {# Si l'erreur emailInvalid existe, alors affiche d'une erreur #}
+                    {% if errorsList.emailInvalid is defined %}
+                        <p class="text-danger">Veuillez spécifier un email valide</p>
+                    {% endif %}
+                    {# Si l'erreur emailAlready existe, alors affcihe d'une erreur #}
+                    {% if errorsList.emailAlready is defined %}
+                        <p class="text-danger">Cet email est déja enregistré</p>
+                    {% endif %}
+                    {# Si l'erreur passwordInvalid existe, alors affcihe d'une erreur #}
+                    {% if errorsList.passwordInvalid is defined %}
+                        <p class="text-danger">Veuillez spécifier un mot de passe valide (entre 1 et 60 caractères)</p>
+                    {% endif %}
+                    {# Si l'erreur confirmInvalid existe, alors affcihe d'une erreur #}
+                    {% if errorsList.confirmInvalid is defined %}
+                        <p class="text-danger">Confirmation différente</p>
+                    {% endif %}
+                    {# name sur le bouton permet de discriminer le formulaire #}
+                    <button type="submit" class="btn btn-primary" name={{ button.admin }}>Ajouter un administarteur</button>
+                </fieldset>
+            </form>
+        {% endif %}
+        </div>
+
+        {# Si une erreur s'est produite sur le formulaire envoyé
+           Les autres formulaires ne sont plus affichés
+           On ajoute un bouton de rechargement pour pouvoir revenir à la page complète
+        #}
+        {% if errorsList.flightForm is defined
+              or errorsList.accommodationForm is defined
+              or errorsList.tourForm  is defined
+              or errorsList.countryForm is defined
+              or errorsList.adminForm is defined
+        %}
+        <div class="col-12 col-md-6">
+            <a href="{{ app.request.uri }}"><button type="button" class="btn btn-info mt-4 mb-4">Recharger la page</button></a>
+        </div>
+        {% endif %}
+    </div>
 {% endblock %}

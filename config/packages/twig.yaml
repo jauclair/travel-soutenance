@@ -4,3 +4,4 @@ twig:
     strict_variables: '%kernel.debug%'
     globals:
         recaptcha_public: '%recaptcha_public%'
+        datas: '@App\Service\Datas'

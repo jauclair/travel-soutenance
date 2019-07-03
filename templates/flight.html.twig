@@ -1,10 +1,30 @@
 {% extends "base.html.twig" %}
 
-{% block title %}vol{% endblock %}
+{% block title %}Suivi de vol{% endblock %}
 
 {% block body %}
-<div class="container">
-    <h1>PAGE VOL</h1>
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-2 col-md-4 rounded-left">
+        <select id="selectId" class="mt-2 bg-transparent">
+            <option value="Stop">Stop</option>
+        </select>
+        </div>
+        <div class="col-7 col-md-6">
+            <h1 id="title">Aucun vol en cours</h1>
+        </div>
+        <div class="col-1 col-md-2 rounded-right">
+            <div id="waitdiv" class="spinner-border text-warning mt-2"></div>
+        </div>
+        <div class="col-12 text-center mt-2 p-0">
+            <div class="overlay"></div>
+            <img id="plane" src="{{asset('img/plane.png')}}" alt="Plane" height="24" width="24">
+            <div id="flightInfo"></div>
+            <iframe id="map" width="100%" height="600" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="
+            https://www.openstreetmap.org/export/embed.html?bbox=-7.360839843750001%2C39.095962936305476%2C16.259765625000004%2C52.62972886718355&amp;layer=mapnik" style="border: 1px solid black">
+            </iframe>
+        </div>
+    </div>
 </div>
-
+<div id="flightid" data-id="{{ flightid|e }}"></div>
 {% endblock %}

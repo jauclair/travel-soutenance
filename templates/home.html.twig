@@ -14,12 +14,12 @@
 			{% for tour in tours %}                
 				<div  class="col-12 col-md-6 px-4">
 					<div class="bloc" class="card col-12 my-2">
-							<img class="card-img-top" src="{{asset('img/'~tour.image) }}" > 							
+						<img class="card-img-top " src="{{asset('img/tours/'~tour.image) }}" alt="image {{ tour.title }}">
 						<div class="card-body mb-5">
 							<h4 class="card-title" style="text-align:center">{{ tour.title }}</h4>
 							<p style="color:red">{{ tour.description }}</p>				 
-							<p class="card-text" style="color:red">{{tour.price}} € </p>							
-							<a href="{{ path('travelDetail') }}" class="btn btn-danger">En savoir plus + </a>
+							<p class="card-text" style="color:red">{{tour.price}} € </p>
+							<a href="{{ path('travelDetail', {id: tour.id}) }}" class="btn btn-danger">En savoir plus +</a>
 						</div>
 					</div>
 				</div>

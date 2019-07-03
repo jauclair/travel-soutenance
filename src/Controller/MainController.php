@@ -33,14 +33,6 @@ public function home(){
 
     $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
 
-    // $tours = $tourRepo->findAll();
-       
-    // //  on récupère la liste de tous les voyages en BDD
-    // $articleRepo = $this->getDoctrine()->getRepository(Tour::class);
-    // $tours = $tourRepo->findOneById(2);
-    // dump($tours);
-
-
     // On récupère la liste des voyages
     $tours = $tourRepo->findAll();
 
@@ -71,12 +63,12 @@ public function home(){
         }
     }
 
-    // conversion les centimes en euro
-    $tours[0]->setPrice($tours[0]->getPrice()/100);
-        
-    // Afficher les vols d'une facon aleatoire :   $tours = $tourRepo->findOneById($tours.Id);
+    // Conversion des centimes en euro pour la sélection de voyages
+    foreach ($tours as $tour)
+        $tour->setPrice($tour->getPrice()/100);
 
-        return $this->render('home.html.twig', ['tours' => $tours]);              
+    // Affiche les voyages sélectionnés aléatoirement
+    return $this->render('home.html.twig', ['tours' => $tours]);              
 }
 
 
@@ -176,18 +168,20 @@ public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $
 */
 public function travelList($country){
 
-    //  on récupère la liste des voyages d'un pays de la BDD
-    $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
-    //  $country = $this->getDoctrine()->getRepository(Country::class);
-
+    // On récupère le pays corespondant au paramètre $country dans la liste des pays de la BDD
     $countryRepo = $this->getDoctrine()->getRepository(Country::class);
-
     $country = $countryRepo->findOneByCountry($country);
 
+    // Si la pays figure bien dans la bdd on récupére la liste des voyages correspondants
     if($country){
-        $tours = $tourRepo->findByCountry($country);  // faut creer une variable d'un pays precis
-     
-    
+        // On récupère la liste des voyages correspondant au pays de la BDD
+        $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
+        $tours = $tourRepo->findByCountry($country);
+
+        // Conversion des centimes en euro pour la sélection de voyages
+        foreach ($tours as $tour)
+            $tour->setPrice($tour->getPrice()/100);
+
         return $this->render('travel-list.html.twig', ['tours' => $tours]);
 
     } else {
@@ -355,22 +349,22 @@ public function contact(Request $request, Swift_Mailer $mailer, Recaptcha $recap
     return $this->render('contact.html.twig');
 }
 
-
 /**
-* @Route("/sejour/", name="travelDetail")
+* @Route("/sejour/{id}/", name="travelDetail")
 * Page du contact du site
 */
-public function travelDetail(){
+public function travelDetail($id){
 
-     //  On récupère les detailsd'un voyage de la BDD
-     $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
+    // On récupère les details d'un voyage de la BDD
+    $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
 
-     $tours = $tourRepo->findOneById('7');  
-    //  dump($tours);
+    $tours = $tourRepo->findOneById($id);
+
+    // Conversion des centimes en euro pour la sélection de voyages
+    foreach ($tours as $tour)
+        $tour->setPrice($tour->getPrice()/100);
    
-   
- 
-         return $this->render('travel-detail.html.twig', ['tour' => $tours]);
+    return $this->render('travel-detail.html.twig', ['tour' => $tours]);
 }
 
 

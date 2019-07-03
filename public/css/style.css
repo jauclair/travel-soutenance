@@ -75,6 +75,11 @@ form{
     background-color: black;
 }
 
+#logotext{
+    font-size: 1.8em;
+    text-shadow: 2px 2px 5px black;
+}
+
 /* css page flight.html.twig */
 .tdl {
     text-align: left;

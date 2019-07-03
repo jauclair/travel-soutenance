@@ -351,8 +351,11 @@ class FlightsMonitor {
 }
 
 // Instanciation de l'objet FlightsMonitor
-const flight = new FlightsMonitor(4000);
-flight.getFlightsInfos();
+let flight = null;
+if (typeof $('#flightid').data('id') !== "undefined") {
+    flight = new FlightsMonitor(4000);
+    flight.getFlightsInfos();
+}
 
 // Appelé réguliérement par le timer
 function getFlightsInfos(){
@@ -366,7 +369,8 @@ function stopUpdate(){
 
 // Appeler sur resize, remet a jour les position et les dimentions
 function resizedEvent(){
-    flight.resize();
+    if(flight !== null)
+        flight.resize();
 }
 
 // Appeler sur selection d'un vol

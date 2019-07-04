@@ -59,6 +59,10 @@
                         {% if errorsList.flightNumInvalid is defined %}
                             <p class="text-info">Veuillez spécifier le n° de vol (entre 1 et 50 caractères)</p>
                         {% endif %}
+                        {# Si l'erreur flightNumAlready existe, alors affiche d'une erreur #}
+                        {% if errorsList.flightNumAlready is defined %}
+                            <p class="text-info">Ce n° de vol est déja présent</p>
+                        {% endif %}
                         <div class="form-group">
                             <label for="departureAirport">Aéroport de départ</label>
                             <input type="text" class="form-control" id="departureAirport" name="departureAirport" placeholder="Nom aéroport">
@@ -281,7 +285,7 @@
                             <div class="custom-file">
                                 <input type="hidden" name="MAX_FILE_SIZE" value="1000000">
                                 <input type="file" class="custom-file-input" id="inputFile" name="inputFile">
-                                <label class="custom-file-label" for="inputFile">Selectionnez une image</label>
+                                <label id="fileLabel" class="custom-file-label" for="inputFile">Selectionnez une image</label>
                             </div>
                         </div>
                         {# Si l'erreur inputFileInvalid existe, alors affiche d'une erreur #}
@@ -389,4 +393,19 @@
         </div>
         {% endif %}
     </div>
+
+    {% block javascripts %}
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+        <script type="text/javascript">
+            if($("#inputFile") !== null){
+                $(function() {
+                    $("#inputFile").change(function (){
+                        let fileName = $(this).val();
+                        $("#fileLabel").text(fileName);
+                    });
+                });
+            }
+        </script>
+    {% endblock %}
+
 {% endblock %}

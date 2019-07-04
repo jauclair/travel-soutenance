@@ -492,7 +492,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                     // Si aucun n° de vol identique n'existe, on l'ajoute
                     if(empty($adminRepo->findOneByFlightNumber($flightNum))){
                         // Création et hydratation de l'objet
-                        $flight =  new Flight();
+                        $flight = new Flight();
                         $flight->setCompanyName($companyName);
                         $flight->setFlightNumber($flightNum);
                         $flight->setDepartureAirport($deptAirp);
@@ -509,6 +509,9 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                                                                     'flights' => $flights,
                                                                     'accommodations' => $accommodations,
                                                                     'successFlight' => true));
+                    }
+                    else{
+                        $errors['flightNumAlready'] = true;
                     }
                 }
 
@@ -660,38 +663,35 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                     // Si le fichier est conforme et à été copié sans erreur
                     else{
                         $adminRepo = $this->getDoctrine()->getRepository(Tour::class);
-                        // Si aucun titre de voyage identique n'existe, on l'ajoute
-                        if(empty($adminRepo->findOneByTitle($title))){
-                            $countryRepo = $this->getDoctrine()->getRepository(Country::class);
-                            $countryObj = $countryRepo->findOneByCountry($country);
-                            $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
-                            $flightObj = $flightRepo->findOneByFlightNumber($flight);
-                            $flightAccommod = $this->getDoctrine()->getRepository(Accommodation::class);
-                            $accommodObj = $flightAccommod->findOneByName($accommodation);
-                            // Création et hydratation de l'objet
-                            $tour =  new Tour();
-                            $tour->setTitle($title);
-                            $tour->setDescription($description);
-                            $tour->setDepartureDate(new DateTime($deptDate));
-                            $tour->setArrivalDate(new DateTime($arrvDate));
-                            $tour->setTravelerGroup(intval($group));
-                            $tour->setCountry($countryObj);
-                            $tour->addFlight($flightObj);
-    //                        $tour->removeFlight($flight);
-                            $tour->addAccommodation($accommodObj);
-    //                        $tour->removeAccommodation($accomodation);
-                            $tour->setPrice($price);
-                            $tour->setImage($fileName);
-                            // Enregistrement en BDD
-                            $em = $this->getDoctrine()->getManager();
-                            $em->persist($tour);
-                            $em->flush();
-                            return $this->render('travel-design.html.twig', array('button' => $butNames,
-                                                                                'countries' => $countries,
-                                                                                'flights' => $flights,
-                                                                                'accommodations' => $accommodations,
-                                                                                'successTour' => true));
-                        }
+                        $countryRepo = $this->getDoctrine()->getRepository(Country::class);
+                        $countryObj = $countryRepo->findOneByCountry($country);
+                        $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
+                        $flightObj = $flightRepo->findOneByFlightNumber($flight);
+                        $flightAccommod = $this->getDoctrine()->getRepository(Accommodation::class);
+                        $accommodObj = $flightAccommod->findOneByName($accommodation);
+                        // Création et hydratation de l'objet
+                        $tour =  new Tour();
+                        $tour->setTitle($title);
+                        $tour->setDescription($description);
+                        $tour->setDepartureDate(new DateTime($deptDate));
+                        $tour->setArrivalDate(new DateTime($arrvDate));
+                        $tour->setTravelerGroup(intval($group));
+                        $tour->setCountry($countryObj);
+                        $tour->addFlight($flightObj);
+//                        $tour->removeFlight($flight);
+                        $tour->addAccommodation($accommodObj);
+//                        $tour->removeAccommodation($accomodation);
+                        $tour->setPrice($price);
+                        $tour->setImage($fileName);
+                        // Enregistrement en BDD
+                        $em = $this->getDoctrine()->getManager();
+                        $em->persist($tour);
+                        $em->flush();
+                        return $this->render('travel-design.html.twig', array('button' => $butNames,
+                                                                            'countries' => $countries,
+                                                                            'flights' => $flights,
+                                                                            'accommodations' => $accommodations,
+                                                                            'successTour' => true));
                     }
                 }
 
@@ -818,11 +818,11 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
 }
 
 /**
- * @Route("/achat-voyage/", name="order")
+ * @Route("/achat-voyage/{flightId}/{tourId}/", name="order")
  * Page d'achat d'un voyage 
  */
-public function order(Request $request){
-        
+public function order(Request $request, $flightId, $tourId){
+
         //Si le formulaire a été cliqué
         if($request->isMethod('POST')){
             //recuperation des données POST
@@ -842,8 +842,8 @@ public function order(Request $request){
             //Données du voyage sélectionner afficher sur la page même en cas d'erreur de remplissage du formulaire
             $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
             $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
-            $flight = $flightRepo->findOneById(1);
-            $tour = $tourRepo->findOneById(1);
+            $flight = $flightRepo->findOneById($flightId);
+            $tour = $tourRepo->findOneById($tourId);
 
             //bloc des vérifs
             if(is_bool($participate)){
@@ -934,8 +934,8 @@ public function order(Request $request){
             //Données du voyage sélectionner afficher sur la page par défaut
             $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
             $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
-            $flight = $flightRepo->findOneById(1);
-            $tour = $tourRepo->findOneById(1);
+            $flight = $flightRepo->findOneById($flightId);
+            $tour = $tourRepo->findOneById($tourId);
         
             //Retour de la vu par défaut
             return $this->render('order.html.twig', ['tour' => $tour, 'flight' => $flight]);

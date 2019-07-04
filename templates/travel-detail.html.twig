@@ -23,6 +23,7 @@
                         <p class="card-text" style="color:red">{{tour.getDepartureDate()|date("m/d/Y")}}</p>
                         <p class="card-text" style="color:red">{{tour.getArrivalDate|date("m/d/Y")}}</p>
                         <p class="card-text" style="color:red">{% if tour.getTravelerGroup() %}En groupe{% else %}{% endif %} </p>
+                        <a class="btn btn-primary" href="/achat-voyage/{{tour.getFlight()[0].getId()}}/{{tour.getId()}}" role="button">Acheter</a>
                     </div>
                 </div>
             </div>          

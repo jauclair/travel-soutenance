@@ -49,7 +49,7 @@
                         </div>
                         {# Si l'erreur companyNameInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.companyNameInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier le nom de la compagnie aérienne (entre 1 et 50 caractères)</p>
+                            <p class="text-info">Veuillez spécifier le nom de la compagnie aérienne (entre 1 et 50 caractères)</p>
                         {% endif %}
                         <div class="form-group">
                             <label for="flightnum">Ajouter le N° de vol</label>
@@ -57,7 +57,7 @@
                         </div>
                         {# Si l'erreur flightNumInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.flightNumInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier le n° de vol (entre 1 et 50 caractères)</p>
+                            <p class="text-info">Veuillez spécifier le n° de vol (entre 1 et 50 caractères)</p>
                         {% endif %}
                         <div class="form-group">
                             <label for="departureAirport">Aéroport de départ</label>
@@ -65,7 +65,7 @@
                         </div>
                         {# Si l'erreur departureAirportInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.departureAirportInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier l'aéroport de départ (entre 1 et 150 caractères)</p>
+                            <p class="text-info">Veuillez spécifier l'aéroport de départ (entre 1 et 150 caractères)</p>
                         {% endif %}
                         <div class="form-group">
                             <label for="arrivalAirport">Aéroport d'arrivée</label>
@@ -73,7 +73,7 @@
                         </div>
                         {# Si l'erreur arrivalAirportInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.arrivalAirportInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier l'aéroport d'arrivée (entre 1 et 150 caractères)</p>
+                            <p class="text-info">Veuillez spécifier l'aéroport d'arrivée (entre 1 et 150 caractères)</p>
                         {% endif %}
                         <div class="row">
                             <div class="col-12 col-md-5">
@@ -83,7 +83,7 @@
                                 </div>
                                 {# Si l'erreur departureDateInvalid existe, alors affiche d'une erreur #}
                                 {% if errorsList.departureDateInvalid is defined %}
-                                    <p class="text-danger">Veuillez spécifier la date de départ yyyy-mm-dd</p>
+                                    <p class="text-info">Veuillez spécifier la date de départ yyyy-mm-dd</p>
                                 {% endif %}
                             </div>
                             <div class="col-12 col-md-5">
@@ -93,11 +93,11 @@
                                 </div>
                                 {# Si l'erreur arrivalDateInvalid existe, alors affiche d'une erreur #}
                                 {% if errorsList.arrivalDateInvalid is defined %}
-                                    <p class="text-danger">Veuillez spécifier la date d'arrivée yyyy-mm-dd</p>
+                                    <p class="text-info">Veuillez spécifier la date d'arrivée yyyy-mm-dd</p>
                                 {% endif %}
                                 {# Si l'erreur datesInvalid existe, alors affiche d'une erreur #}
                                 {% if errorsList.datesInvalid is defined %}
-                                    <p class="text-danger">Veuillez spécifier une date d'arrivée > à la date de départ</p>
+                                    <p class="text-info">Veuillez spécifier une date d'arrivée > à la date de départ</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                         </div>
                         {# Si l'erreur nameInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.nameInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier le nom de l'hébergement (entre 1 et 50 caractères)</p>
+                            <p class="text-info">Veuillez spécifier le nom de l'hébergement (entre 1 et 50 caractères)</p>
                         {% endif %}
                         <div class="form-group">
                             <label for="phone">Ajouter le N° de téléphone</label>
@@ -133,7 +133,7 @@
                         </div>
                         {# Si l'erreur phoneInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.phoneInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier le n° de téléphone</p>
+                            <p class="text-info">Veuillez spécifier le n° de téléphone</p>
                         {% endif %}
                         <div class="form-group">
                             <label for="email">Email</label>
@@ -141,7 +141,7 @@
                         </div>
                         {# Si l'erreur emailInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.emailInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier un email</p>
+                            <p class="text-info">Veuillez spécifier un email</p>
                         {% endif %}
                         <div class="form-group">
                             <label for="address">Adresse</label>
@@ -149,7 +149,7 @@
                         </div>
                         {# Si l'erreur addressInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.addressInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier une adresse (entre 1 et 100 caractères)</p>
+                            <p class="text-info">Veuillez spécifier une adresse (entre 1 et 100 caractères)</p>
                         {% endif %}
                         <div class="form-group">
                             <label for="country">Pays</label><br />
@@ -160,7 +160,7 @@
                             </select>
                             {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
                             {% if errorsList.countryInvalid is defined %}
-                                <p class="text-danger">Veuillez sélectionner pays</p>
+                                <p class="text-info">Veuillez sélectionner pays</p>
                             {% endif %}
                         </div>
                         <!-- name sur le bouton permet de discriminer le formulaire -->
@@ -182,12 +182,12 @@
                         <legend  class="w-auto">Ajouter un voyage</legend>
                             <div class="form-group">
                         <div class="form-group">
-                            <label for="title">Ajouter le titre du voyage</label>
-                            <input type="text" class="form-control" id="title" name="title" placeholder="Tire du voyage">
+                            <label for="travelTitle">Ajouter le titre du voyage</label>
+                            <input type="text" class="form-control" id="travelTitle" name="travelTitle" placeholder="Titre du voyage">
                         </div>
                         {# Si l'erreur titleInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.titleInvalid is defined %}
-                            <p class="text-danger">Veuillez ajouter un titre</p>
+                            <p class="text-info">Veuillez ajouter un titre</p>
                         {% endif %}
                         <div class="form-group">
                           <label for="description">Description du voyage</label>
@@ -195,7 +195,7 @@
                         </div>
                         {# Si l'erreur descriptionInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.descriptionInvalid is defined %}
-                            <p class="text-danger">Veuillez ajouter une description du voyage</p>
+                            <p class="text-info">Veuillez ajouter une description du voyage</p>
                         {% endif %}
                         <div class="row">
                             <div class="col-12 col-md-5">
@@ -205,7 +205,7 @@
                                 </div>
                                 {# Si l'erreur departureDateInvalid existe, alors affiche d'une erreur #}
                                 {% if errorsList.departureDateInvalid is defined %}
-                                    <p class="text-danger">Veuillez spécifier la date de départ yyyy-mm-dd</p>
+                                    <p class="text-info">Veuillez spécifier la date de départ yyyy-mm-dd</p>
                                 {% endif %}
                             </div>
                             <div class="col-12 col-md-5">
@@ -215,11 +215,11 @@
                                 </div>
                                 {# Si l'erreur arrivalDateInvalid existe, alors affiche d'une erreur #}
                                 {% if errorsList.arrivalDateInvalid is defined %}
-                                    <p class="text-danger">Veuillez spécifier la date de retour yyyy-mm-dd</p>
+                                    <p class="text-info">Veuillez spécifier la date de retour yyyy-mm-dd</p>
                                 {% endif %}
                                 {# Si l'erreur datesInvalid existe, alors affiche d'une erreur #}
                                 {% if errorsList.datesInvalid is defined %}
-                                    <p class="text-danger">Veuillez spécifier une date d'arrivée > à la date de départ</p>
+                                    <p class="text-info">Veuillez spécifier une date d'arrivée > à la date de départ</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -237,7 +237,7 @@
                         </div>
                         {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.countryInvalid is defined %}
-                            <p class="text-danger">Veuillez sélectionner un pays</p>
+                            <p class="text-info">Veuillez sélectionner un pays</p>
                         {% endif %}
                         <div class="row">
                             <div class="col-12 col-md-5">
@@ -251,7 +251,7 @@
                                 </div>
                                 {# Si l'erreur flightInvalid existe, alors affiche d'une erreur #}
                                 {% if errorsList.flightInvalid is defined %}
-                                    <p class="text-danger">Veuillez sélectionner un vol</p>
+                                    <p class="text-info">Veuillez sélectionner un vol</p>
                                 {% endif %}
                             </div>
                             <div class="col-12 col-md-5">
@@ -265,7 +265,7 @@
                                 </div>
                                 {# Si l'erreur accommodationInvalid existe, alors affiche d'une erreur #}
                                 {% if errorsList.accommodationInvalid is defined %}
-                                    <p class="text-danger">Veuillez sélectionner un hébergement</p>
+                                    <p class="text-info">Veuillez sélectionner un hébergement</p>
                                 {% endif %}
                             </div>
                         </div>
@@ -275,7 +275,7 @@
                         </div>
                         {# Si l'erreur priceInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.priceInvalid is defined %}
-                            <p class="text-danger">Veuillez spécifier le prix</p>
+                            <p class="text-info">Veuillez spécifier le prix</p>
                         {% endif %}
                         <div class="form-group">
                             <div class="custom-file">
@@ -286,11 +286,11 @@
                         </div>
                         {# Si l'erreur inputFileInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.inputFileInvalid is defined %}
-                            <p class="text-danger">Veuillez sélectionner une image</p>
+                            <p class="text-info">Veuillez sélectionner une image</p>
                         {% endif %}
                         {# Si l'erreur inputFileError existe, alors affiche d'une erreur #}
                         {% if errorsList.inputFileError is defined %}
-                            <p class="text-danger">Veuillez sélectionner une image jpg ou png d'une taille maxi {{ maxSize }}</p>
+                            <p class="text-info">Veuillez sélectionner une image jpg ou png d'une taille maxi {{ maxSize }}</p>
                         {% endif %}
                         <!-- name sur le bouton permet de discriminer le formulaire -->
                         <button type="submit" class="btn btn-primary" name={{ button.tour }}>Ajouter un voyage</button>
@@ -316,11 +316,11 @@
                     </div>
                     {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
                     {% if errorsList.countryInvalid is defined %}
-                        <p class="text-danger">Veuillez spécifier un nom de pays (entre 1 et 50 caractères)</p>
+                        <p class="text-info">Veuillez spécifier un nom de pays (entre 1 et 50 caractères)</p>
                     {% endif %}
                     {# Si l'erreur countryAlready existe, alors affcihe d'une erreur #}
                     {% if errorsList.countryAlready is defined %}
-                        <p class="text-danger">Ce pays est déja présent dans la base de données</p>
+                        <p class="text-info">Ce pays est déja présent dans la base de données</p>
                     {% endif %}
                     {# name sur le bouton permet de discriminer le formulaire #}
                     <button type="submit" class="btn btn-primary" name={{ button.country }}>Ajouter un pays</button>
@@ -353,19 +353,19 @@
                     </div>
                     {# Si l'erreur emailInvalid existe, alors affiche d'une erreur #}
                     {% if errorsList.emailInvalid is defined %}
-                        <p class="text-danger">Veuillez spécifier un email valide</p>
+                        <p class="text-info">Veuillez spécifier un email valide</p>
                     {% endif %}
                     {# Si l'erreur emailAlready existe, alors affcihe d'une erreur #}
                     {% if errorsList.emailAlready is defined %}
-                        <p class="text-danger">Cet email est déja enregistré</p>
+                        <p class="text-info">Cet email est déja enregistré</p>
                     {% endif %}
                     {# Si l'erreur passwordInvalid existe, alors affcihe d'une erreur #}
                     {% if errorsList.passwordInvalid is defined %}
-                        <p class="text-danger">Veuillez spécifier un mot de passe valide (entre 1 et 60 caractères)</p>
+                        <p class="text-info">Veuillez spécifier un mot de passe valide (entre 1 et 60 caractères)</p>
                     {% endif %}
                     {# Si l'erreur confirmInvalid existe, alors affcihe d'une erreur #}
                     {% if errorsList.confirmInvalid is defined %}
-                        <p class="text-danger">Confirmation différente</p>
+                        <p class="text-info">Confirmation différente</p>
                     {% endif %}
                     {# name sur le bouton permet de discriminer le formulaire #}
                     <button type="submit" class="btn btn-primary" name={{ button.admin }}>Ajouter un administarteur</button>

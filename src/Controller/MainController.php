@@ -590,7 +590,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
             // ============== Cas du formulaire tour ============================================
             case array_keys($butNames)[2]:
                 // Recuperation des données POST
-                $title = $request->request->get('title');
+                $title = $request->request->get('travelTitle');
                 $description = $request->request->get('description');
                 $deptDate = $request->request->get('departureDate');
                 $arrvDate = $request->request->get('arrivalDate');
@@ -606,7 +606,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                     $errors['titleInvalid']=true;
                 }
 
-                if(!preg_match('#^.{1,65535}$#', $description)){
+                if(mb_strlen($description) > 65535){
                     $errors['descriptionInvalid'] = true;
                 }
 
@@ -616,6 +616,10 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
 
                 if(!preg_match('#^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$#', $arrvDate)){
                     $errors['arrivalDateInvalid']=true;
+                }
+
+                if($deptDate >= $arrvDate){
+                    $errors['datesInvalid']=true;   
                 }
 
                 if($group !== null && $group !== "on"){

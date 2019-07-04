@@ -18,7 +18,7 @@
                     <div class="card-body mb-5">
                         <h4 class="card-title" style="text-align:center">{{ tour.title }}</h4>
                         <p class="card-text" style="color:red">{{tour.getCountry().getCountry()}} </p>
-                        <p style="color:red">{{tour.description}}</p>				 
+                        <p style="color:red">{{tour.description|purify}}</p>				 
                         <p class="card-text" style="color:red">{{tour.price}} € </p>
                         <p class="card-text" style="color:red">{{tour.getDepartureDate()|date("m/d/Y")}}</p>
                         <p class="card-text" style="color:red">{{tour.getArrivalDate|date("m/d/Y")}}</p>

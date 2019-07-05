@@ -25,7 +25,8 @@
 									{# Voir comment afficher seulement le début (pb c'est en html)
 									<p style="color:red">{{ tour.description|purify }}</p>				 
 									#}
-									<p class="card-text" style="color:red">{{tour.price}}</p>
+									{# // Conversion des centimes en euro pour #}
+									<p class="card-text" style="color:red">{{tour.price / 100.0}}</p>
 									<p class="card-text" style="color:red">{{tour.getDepartureDate()|date("m/d/Y")}}</p>
 									<p class="card-text" style="color:red">{{tour.getArrivalDate|date("m/d/Y")}}</p>
 									<p class="card-text" style="color:red">{% if tour.getTravelerGroup() %}En groupe{% else %}Seul{% endif %}</p>

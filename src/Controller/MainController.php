@@ -63,10 +63,6 @@ public function home(){
         }
     }
 
-    // Conversion des centimes en euro pour la sélection de voyages
-    foreach ($tours as $tour)
-        $tour->setPrice($tour->getPrice()/100);
-
     // Affiche les voyages sélectionnés aléatoirement
     return $this->render('home.html.twig', ['tours' => $tours]);              
 }
@@ -177,10 +173,6 @@ public function travelList($country){
         // On récupère la liste des voyages correspondant au pays de la BDD
         $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
         $tours = $tourRepo->findByCountry($country);
-
-        // Conversion des centimes en euro pour la sélection de voyages
-        foreach ($tours as $tour)
-            $tour->setPrice($tour->getPrice()/100);
 
         return $this->render('travel-list.html.twig', ['tours' => $tours]);
 
@@ -358,13 +350,9 @@ public function travelDetail($id){
     // On récupère les details d'un voyage de la BDD
     $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
 
-    $tours = $tourRepo->findOneById($id);
+    $tour = $tourRepo->findOneById($id);
 
-    // Conversion des centimes en euro pour la sélection de voyages
-    foreach ($tours as $tour)
-        $tour->setPrice($tour->getPrice()/100);
-   
-    return $this->render('travel-detail.html.twig', ['tour' => $tours]);
+    return $this->render('travel-detail.html.twig', ['tour' => $tour]);
 }
 
 
@@ -599,8 +587,12 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 $arrvDate = $request->request->get('arrivalDate');
                 $group = $request->request->get('group');
                 $country = $request->request->get('country');
-                $flight = $request->request->get('flight');
-                $accommodation = $request->request->get('accommodation');
+                $selFlights = $request->request->get('selFlights');
+                // Récupération des vols sous forme de tableau
+                $selFlights = explode("/", $selFlights);
+                $selAccommodations = $request->request->get('selAccommodations');
+                // Récupération des hébergement sous forme de tableau
+                $selAccommodations = explode("/", $selAccommodations);
                 $price = $request->request->get('price');
                 $inputFile = $request->files->get('inputFile');
 
@@ -633,11 +625,11 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                     $errors['countryInvalid']=true;
                 }
 
-                if($flight === ""){
+                if(count($selFlights) == 0){
                     $errors['flightInvalid']=true;
                 }
 
-                if($accommodation === ""){
+                if(count($selAccommodations) == 0){
                     $errors['accommodationInvalid']=true;
                 }
 
@@ -666,9 +658,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                         $countryRepo = $this->getDoctrine()->getRepository(Country::class);
                         $countryObj = $countryRepo->findOneByCountry($country);
                         $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
-                        $flightObj = $flightRepo->findOneByFlightNumber($flight);
-                        $flightAccommod = $this->getDoctrine()->getRepository(Accommodation::class);
-                        $accommodObj = $flightAccommod->findOneByName($accommodation);
+                        $accommodationRepo = $this->getDoctrine()->getRepository(Accommodation::class);
                         // Création et hydratation de l'objet
                         $tour =  new Tour();
                         $tour->setTitle($title);
@@ -677,10 +667,19 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                         $tour->setArrivalDate(new DateTime($arrvDate));
                         $tour->setTravelerGroup(intval($group));
                         $tour->setCountry($countryObj);
-                        $tour->addFlight($flightObj);
-//                        $tour->removeFlight($flight);
-                        $tour->addAccommodation($accommodObj);
-//                        $tour->removeAccommodation($accomodation);
+
+                        // Ajout des vols selectionnés
+                        foreach ($selFlights as $flight){
+                            $flightObj = $flightRepo->findOneByFlightNumber($flight);
+                            $tour->addFlight($flightObj);
+                        }
+
+                        // Ajout des hébergements selectionnés
+                        foreach ($selAccommodations as $accommodation){
+                            $accommodObj = $accommodationRepo->findOneByName($accommodation);
+                            $tour->addAccommodation($accommodObj);
+                        }
+
                         $tour->setPrice($price);
                         $tour->setImage($fileName);
                         // Enregistrement en BDD
@@ -818,10 +817,10 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
 }
 
 /**
- * @Route("/achat-voyage/{flightId}/{tourId}/", name="order")
+ * @Route("/achat-voyage/{tourId}/", name="order")
  * Page d'achat d'un voyage 
  */
-public function order(Request $request, $flightId, $tourId){
+public function order(Request $request, $tourId){
 
         //Si le formulaire a été cliqué
         if($request->isMethod('POST')){
@@ -841,9 +840,9 @@ public function order(Request $request, $flightId, $tourId){
             $phone2 = $request->request->get('phone2');
             //Données du voyage sélectionner afficher sur la page même en cas d'erreur de remplissage du formulaire
             $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
-            $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
-            $flight = $flightRepo->findOneById($flightId);
             $tour = $tourRepo->findOneById($tourId);
+            $flights = $tour->getFlight();
+            $accommodations = $tour->getAccommodations();
 
             //bloc des vérifs
             if(is_bool($participate)){
@@ -890,7 +889,7 @@ public function order(Request $request, $flightId, $tourId){
             //Si erreur
             if(isset($errors)){
                 //retour de la vu avec les erreurs
-                return $this->render('order.html.twig', ['errorsList'=>$errors, 'tour' => $tour, 'flight' => $flight]);
+                return $this->render('order.html.twig', ['errorsList'=>$errors, 'tour' => $tour, 'flights' => $flights, 'accommodations' => $$accommodations]);
             //Sinon  
             }else{
                 //Création d'un nouveau client dans la BDD
@@ -925,20 +924,21 @@ public function order(Request $request, $flightId, $tourId){
                 $session->set('clientParticipate', $participate);
                 $session->set('clientGroupNbr', $groupNbr);
                 $session->set('tour', $tour);
-                $session->set('flight', $flight);
+                $session->set('flights', $flights);
+                $session->set('accommodations', $accommodations);
 
                 //Retour de la vu avec les données renseigner pour confirmation
-                return $this->render('order.html.twig', ['success'=> true, 'tour' => $tour, 'flight' => $flight, 'newClient' => $newClient]); 
+                return $this->render('order.html.twig', ['success'=> true, 'tour' => $tour, 'flights' => $flights, 'newClient' => $newClient]); 
             }
         }else{
             //Données du voyage sélectionner afficher sur la page par défaut
             $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
-            $flightRepo = $this->getDoctrine()->getRepository(Flight::class);
-            $flight = $flightRepo->findOneById($flightId);
             $tour = $tourRepo->findOneById($tourId);
+            $flights = $tour->getFlight();
+            $accommodations = $tour->getAccommodations();
         
             //Retour de la vu par défaut
-            return $this->render('order.html.twig', ['tour' => $tour, 'flight' => $flight]);
+            return $this->render('order.html.twig', ['tour' => $tour, 'flights' => $flights, 'accommodations' => $accommodations]);
         }
 }
 

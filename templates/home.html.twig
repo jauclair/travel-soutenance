@@ -20,7 +20,8 @@
 							{# Voir comment afficher seulement le début (pb c'est en html)
 							<p style="color:red">{{ tour.description|purify }}</p>
 							#}
-							<p class="card-text" style="color:red">{{tour.price}} € </p>
+							{# // Conversion des centimes en euro pour #}
+							<p class="card-text" style="color:red">{{tour.price / 100.0}} € </p>
 							<a href="{{ path('travelDetail', {id: tour.id}) }}" class="btn btn-danger">En savoir plus +</a>
 						</div>
 					</div>

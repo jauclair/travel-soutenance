@@ -17,13 +17,14 @@
                     <img class="card-img-top" src="{{asset('img/tours/'~tour.image) }}" alt="image {{ tour.title }}">
                     <div class="card-body mb-5">
                         <h4 class="card-title" style="text-align:center">{{ tour.title }}</h4>
-                        <p class="card-text" style="color:red">{{tour.getCountry().getCountry()}} </p>
-                        <p style="color:red">{{tour.description|purify}}</p>				 
-                        <p class="card-text" style="color:red">{{tour.price}} € </p>
+                        <p class="card-text" style="color:red">{{tour.getCountry().getCountry()}}</p>
+                        <p style="color:red">{{tour.description|purify}}</p>
+                        {# // Conversion des centimes en euro pour #}
+                        <p class="card-text" style="color:red">{{tour.price / 100.0}} €</p>
                         <p class="card-text" style="color:red">{{tour.getDepartureDate()|date("m/d/Y")}}</p>
                         <p class="card-text" style="color:red">{{tour.getArrivalDate|date("m/d/Y")}}</p>
-                        <p class="card-text" style="color:red">{% if tour.getTravelerGroup() %}En groupe{% else %}{% endif %} </p>
-                        <a class="btn btn-primary" href="/achat-voyage/{{tour.getFlight()[0].getId()}}/{{tour.getId()}}" role="button">Acheter</a>
+                        <p class="card-text" style="color:red">{% if tour.getTravelerGroup() %}En groupe{% else %}{% endif %}</p>
+                        <a class="btn btn-primary" href="/achat-voyage/{{tour.getId()}}" role="button">Acheter</a>
                     </div>
                 </div>
             </div>          

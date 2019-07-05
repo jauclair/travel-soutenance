@@ -11,7 +11,7 @@
 	<p>Vous avez reserver le voyage "{{ tour.title }}"</p>
 	<p>Vous partez le {{tour.DepartureDate|date('d/m/Y')}}</p>
 	<p>Vous revenez le {{tour.ArrivalDate|date('d/m/Y')}}</p>
-	<p>Et vous payerez {{tour.price}}€</p>
+	<p>Et vous payerez {{tour.price/100}}€</p>
 	<p>Confirmez vos informations personnelles :</p>
 	<p>Votre prénom: {{newClient.FirstName}}</p>
 	<p>Votre nom: {{newClient.Lastname}}</p>
@@ -22,7 +22,7 @@
 	<div class="d-flex flex-column flex-sm-row justify-content-center my-4"></div>
 		<!--Boutons dirigeant soit sur la page suivante, soit sur la page précédente en cas d'erreurs dans le remplissage du formulaire-->
 		<a href="{{ path('bankData') }}" type="submit" class="btn btn-success text-warning ">Confirmer votre commande</a>
-		<a href="{{ path('order') }}" type="submit" class="btn btn-danger text-warning">Annuler votre commande</a>
+		<a href="/achat-voyage/{{tour.getId()}}" type="submit" class="btn btn-danger text-warning">Annuler votre commande</a>
 	</div>
 </div>
 {% else %}
@@ -39,14 +39,25 @@
     </tr>
   </thead>
   <tbody>
-    <tr>
 		<!--Recapitulatif du voyage selectionné-->
-      <td scope="row">{{flight.ArrivalAirport}}</td>
-      <td>{{flight.DepartureAirport}}</td>
-      <td>{{flight.DepartureDate|date('d/m/Y')}}</td>
-      <td>{{flight.ArrivalDate|date('d/m/Y')}}</td>
-      <td>{{tour.price}}€</td>
-    </tr>
+		<p>Vos Hébergements </p>
+        {% for accommodation in accommodations %}
+        	<p>{{ accommodation.name }}</p>
+        {% endfor %}
+        {% for flight in flights %}
+        	<tr>
+		      	<td scope="row">{{flight.ArrivalAirport}}</td>
+		      	<td>{{flight.DepartureAirport}}</td>
+		      	<td>{{flight.DepartureDate|date('d/m/Y')}}</td>
+		      	<td>{{flight.ArrivalDate|date('d/m/Y')}}</td>
+		      	<td></td>
+	      	</tr>
+      	{% endfor %}
+      	<tr>
+      		<td></td><td></td><td></td>
+      		<td>Total</td>
+    	  	<td>{{tour.price/100}}€</td>
+    	</tr>
   </tbody>
 </table>
 </div>
@@ -84,7 +95,7 @@
 		</select>
 		<!--erreur si le champ est invalide-->
 		{% if errorsList.invalidGroupNbr is defined %}
-			<p class="text-danger">Veuillez sélectionnez un nombre</p>
+			<p class="text-info">Veuillez sélectionnez un nombre</p>
 		{% endif %}
 		</div>
 		<h2 class="text-center text-danger">Coordonnées</h2>
@@ -97,7 +108,7 @@
 				</select>
 				<!--erreur si le champ est invalide-->
 				{% if errorsList.invalidCivility is defined %}
-					<p class="text-danger">Veuillez sélectionnez une civilité</p>
+					<p class="text-info">Veuillez sélectionnez une civilité</p>
 				{% endif %}
 				</div>
 				<div class="form-group  col-4">
@@ -105,7 +116,7 @@
 					<input type="text" class="form-control" id="lastname" placeholder="Nom" name="lastname" >
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidLastname is defined %}
-						<p class="text-danger">Nom invalide</p>
+						<p class="text-info">Nom invalide</p>
 					{% endif %}
 				</div>
 				<div class="form-group  col-4">
@@ -113,7 +124,7 @@
 					<input type="text" class="form-control" id="firstname" placeholder="Prénom" name="firstname">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidfirstname is defined %}
-						<p class="text-danger">Prénom invalide</p>
+						<p class="text-info">Prénom invalide</p>
 					{% endif %}
 				</div>
 				</div>
@@ -123,7 +134,7 @@
 					<input type="text" class="form-control" id="country" aria-describedby="emailHelp" placeholder="Pays" name="country">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidCountry is defined %}
-						<p class="text-danger">Pays invalide</p>
+						<p class="text-info">Pays invalide</p>
 					{% endif %}
 				</div>
 				<div class="form-group  col-4">
@@ -131,7 +142,7 @@
 					<input type="text" class="form-control" id="postCode" placeholder="Code postal" name="postCode">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidPostCode is defined %}
-						<p class="text-danger">Code postal invalide</p>
+						<p class="text-info">Code postal invalide</p>
 					{% endif %}
 				</div>
 				<div class="form-group col-4">
@@ -139,7 +150,7 @@
 					<input type="text" class="form-control" id="city" placeholder="Ville" name="city">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidCity is defined %}
-						<p class="text-danger">Ville invalide</p>
+						<p class="text-info">Ville invalide</p>
 					{% endif %}
 				</div>
 				</div>
@@ -149,7 +160,7 @@
 					<input type="text" class="form-control" id="adress" aria-describedby="emailHelp" placeholder="Adresse" name="adress">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidAdress is defined %}
-						<p class="text-danger">Adresse invalide</p>
+						<p class="text-info">Adresse invalide</p>
 					{% endif %}
 				</div>
 				</div>
@@ -159,7 +170,7 @@
 					<input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Email" name="email">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidEmail is defined %}
-						<p class="text-danger">Email invalide</p>
+						<p class="text-info">Email invalide</p>
 					{% endif %}
 				</div>
 				<div class="form-group col-6">
@@ -167,7 +178,7 @@
 					<input type="email" class="form-control" id="confirmEmail" placeholder="Confirmation email" name="confirmEmail">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidConfirmEmail is defined %}
-						<p class="text-danger">Confirmation email invalide</p>
+						<p class="text-info">Confirmation email invalide</p>
 					{% endif %}
 				</div>
 				</div>
@@ -177,7 +188,7 @@
 					<input type="text" class="form-control" id="phone1" aria-describedby="emailHelp" placeholder="Télephone 1" name="phone1">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidPhone1 is defined %}
-						<p class="text-danger">Télephone invalide</p>
+						<p class="text-info">Télephone invalide</p>
 					{% endif %}
 				</div>
 				<div class="form-group col-6">
@@ -185,7 +196,7 @@
 					<input type="text" class="form-control" id="phone2" placeholder="Télephone 2" name="phone2">
 					<!--erreur si le champ est invalide-->
 					{% if errorsList.invalidPhone2 is defined %}
-						<p class="text-danger">Télephone invalide</p>
+						<p class="text-info">Télephone invalide</p>
 					{% endif %}
 				</div>
 				</div>

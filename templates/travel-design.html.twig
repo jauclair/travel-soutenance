@@ -227,27 +227,38 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="checkbox">
-                            <label for="group">Groupe</label>
-                            <input type="checkbox" id="group" name="group" placeholder="Voyage en groupe">
-                        </div>
-                        <div class="form-group">
-                            <label for="country">Pays</label><br />
-                            <select name="country" id="country">
-                                {% for country in countries %}
-                                    <option value="{{ country.country|e }}">{{ country.country|e }}</option>
-                                {% endfor %}
-                            </select>
+                        {# Indication groupe et pays #}
+                        <div class="row">
+                            {# Indication groupe #}
+                            <div class="col-12 col-md-5">
+                                <label for="group">Groupe</label>
+                                <div class="checkbox">
+                                    <input type="checkbox" id="group" name="group" placeholder="Voyage en groupe">
+                                </div>
+                            </div>
+                            {# Indication pays #}
+                            <div class="col-12 col-md-5">
+                                <div class="form-group">
+                                    <label for="country">Pays</label><br />
+                                    <select name="country" id="country">
+                                        {% for country in countries %}
+                                            <option value="{{ country.country|e }}">{{ country.country|e }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
                         {% if errorsList.countryInvalid is defined %}
                             <p class="text-info">Veuillez sélectionner un pays</p>
                         {% endif %}
+                        {# Selection des vols #}
                         <div class="row">
                             <div class="col-12 col-md-5">
                                 <div class="form-group">
-                                    <label for="flight">Vol</label><br />
-                                    <select name="flight" id="flight">
+                                    <label for="flightList">Vols</label><br />
+                                    <select name="flightList" id="flightList">
+                                        <option value=""></option>
                                         {% for flight in flights %}
                                             <option value="{{ flight.flightNumber|e }}">{{ flight.flightNumber|e }}</option>
                                         {% endfor %}
@@ -260,8 +271,21 @@
                             </div>
                             <div class="col-12 col-md-5">
                                 <div class="form-group">
-                                    <label for="accommodation">Hébergement</label><br />
-                                    <select name="accommodation" id="accommodation">
+                                    <label for="flightSel">Sélectionnés / Suppr</label><br />
+                                    <select name="flightSel" id="flightSel">
+                                        <option value=""></option>
+                                    </select>
+                                    <input type="hidden" id="selFlights" name="selFlights" value="">
+                                </div>
+                            </div>
+                        </div>
+                        {# Selection des hébergements #}
+                        <div class="row">
+                            <div class="col-md-12 col-lg-5">
+                                <div class="form-group">
+                                    <label for="accommodationList">Hébergements</label><br />
+                                    <select name="accommodationList" id="accommodationList">
+                                        <option value=""></option>
                                         {% for accommodation in accommodations %}
                                             <option value="{{ accommodation.name|e }}">{{ accommodation.name|e }}</option>
                                         {% endfor %}
@@ -272,7 +296,17 @@
                                     <p class="text-info">Veuillez sélectionner un hébergement</p>
                                 {% endif %}
                             </div>
+                            <div class="col-md-12 col-lg-5">
+                                <div class="form-group">
+                                    <label for="accommodationSel">Sélectionnés / Suppr</label><br />
+                                    <select name="accommodationSel" id="accommodationSel">
+                                        <option value=""></option>
+                                    </select>
+                                    <input type="hidden" id="selAccommodations" name="selAccommodations" value="">
+                                </div>
+                            </div>
                         </div>
+                        {# Indication du prix du voyage #}
                         <div class="form-group">
                             <label for="price">Prix du voyage</label>
                             <input type="number" class="form-control" id="price" name="price" placeholder="1200.22">
@@ -397,12 +431,80 @@
     {% block javascripts %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
         <script type="text/javascript">
+            function updateHidden(){
+                let $flight = "";
+                let $accommodation = "";
+                // Get selected flight imput
+                $("#flightSel option").each(function(){
+                    if($(this).val().length > 0)
+                        $flight += ($(this).val().trim() + "/");
+                });
+                // Remove last '/'
+                $flight = $flight.slice(0,-1);
+                // Set selected accommodation imput
+                $("#accommodationSel option").each(function(){
+                    if($(this).val().length > 0)
+                        $accommodation += ($(this).val().trim() + "/");
+                });
+                // Remove last '/'
+                $accommodation = $accommodation.slice(0,-1);
+
+                // Set hidden inputs
+                $("#selFlights").val($flight);
+                $("#selAccommodations").val($accommodation);
+            }
+
+            // Select file events
             if($("#inputFile") !== null){
-                $(function() {
-                    $("#inputFile").change(function (){
-                        let fileName = $(this).val();
-                        $("#fileLabel").text(fileName);
-                    });
+                $("#inputFile").change(function (){
+                    let fileName = $(this).val();
+                    $("#fileLabel").text(fileName);
+                });
+            }
+
+            // Add remove flights events
+            if($("#flightList") !== null){
+                // Add
+                $("#flightList").change(function (event){
+                    event.stopImmediatePropagation();
+                    // Display selected flightSel number
+                    $('#flightSel option:first-child').text($('#flightSel option').length);
+                    $('#flightSel').append(`<option value='${$("#flightList").val()}'>${$("#flightList").val()}</option>`);
+                    $('#flightList option:first-child').attr("selected", true);
+                    $("#fligh").append();
+                    updateHidden();
+                });
+                // Suppress
+                $("#flightSel").change(function (event){
+                    event.stopImmediatePropagation();
+                    alert($("#flightSel").val() + " supprimé");
+                    $(`#flightSel option[value='${$("#flightSel").val()}']`).remove();
+                    // Display selected flightSel number
+                    $('#flightSel option:first-child').text($('#flightSel option').length - 1);
+                    $('#flightSel option:first-child').attr("selected", true);
+                    updateHidden();
+                });
+            }
+            // Add remove accomodation events
+            if($("#accommodationList") !== null){
+                // Add
+                $("#accommodationList").change(function (event){
+                    event.stopImmediatePropagation();
+                    // Display selected accommodationSel number
+                    $('#accommodationSel option:first-child').text($('#accommodationSel option').length);
+                    $('#accommodationSel').append(`<option value='${$("#accommodationList").val()}'>${$("#accommodationList").val()}</option>`);
+                    $('#accommodationList option:first-child').attr("selected", true);
+                    updateHidden();
+                });
+                // Suppress
+                $("#accommodationSel").change(function (event){
+                    event.stopImmediatePropagation();
+                    alert($("#accommodationSel").val() + " supprimé");
+                    $(`#accommodationSel option[value='${$("#accommodationSel").val()}']`).remove();
+                    // Display selected accommodationSel number
+                    $('#accommodationSel option:first-child').text($('#accommodationSel option').length - 1);
+                    $('#accommodationSel option:first-child').attr("selected", true);
+                    updateHidden();
                 });
             }
         </script>

@@ -228,8 +228,8 @@ public function connection(Request $request){
                     //Connexion de l'admin
                     $session->set('account', $admin);
 
-                    //Si connexion réussit, charge de la vue avec msg succès
-                    return $this->render('connection.html.twig', array('success' => true));
+                    //Si connexion réussit, on redirige vers la vue travel-design
+                    return $this->redirectToRoute('travel-design');
                 
                 //Si mauvais mot de passe alors erreur
                 }else{
@@ -518,9 +518,9 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 // Recuperation des données POST
                 $name = $request->request->get('name');
                 $phone = $request->request->get('phone');
-                $email = $request->request->get('email');
+                $email = $request->request->get('emailAc');
                 $address = $request->request->get('address');
-                $country = $request->request->get('country');
+                $country = $request->request->get('countryAc');
 
                 // Bloc des verification des champs
                 if(!preg_match('#^.{1,50}$#', $name)){
@@ -532,7 +532,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 }
 
                 if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
-                    $errors['emailInvalid'] = true;
+                    $errors['emailAcInvalid'] = true;
                 }
 
                 if(!preg_match('#^.{1,100}$#', $address)){
@@ -540,7 +540,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 }
 
                 if(!preg_match('#^.{1,50}$#', $country)){
-                    $errors['countryInvalid']=true;
+                    $errors['countryAcInvalid']=true;
                 }
 
                 // Si aucune erreurs dans les données en entrée.
@@ -583,10 +583,10 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 // Recuperation des données POST
                 $title = $request->request->get('travelTitle');
                 $description = $request->request->get('description');
-                $deptDate = $request->request->get('departureDate');
-                $arrvDate = $request->request->get('arrivalDate');
+                $deptDate = $request->request->get('departureDateTr');
+                $arrvDate = $request->request->get('arrivalDateTr');
                 $group = $request->request->get('group');
-                $country = $request->request->get('country');
+                $country = $request->request->get('countryTr');
                 $selFlights = $request->request->get('selFlights');
                 // Récupération des vols sous forme de tableau
                 $selFlights = explode("/", $selFlights);
@@ -606,11 +606,11 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 }
 
                 if(!preg_match('#([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$#', $deptDate)){
-                    $errors['departureDateInvalid']=true;
+                    $errors['departureDateTrInvalid']=true;
                 }
 
                 if(!preg_match('#^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$#', $arrvDate)){
-                    $errors['arrivalDateInvalid']=true;
+                    $errors['arrivalDateTrInvalid']=true;
                 }
 
                 if($deptDate >= $arrvDate){
@@ -622,7 +622,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 }
 
                 if(!preg_match('#^.{1,50}$#', $country)){
-                    $errors['countryInvalid']=true;
+                    $errors['countryTrInvalid']=true;
                 }
 
                 if(count($selFlights) == 0){
@@ -634,7 +634,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 }
 
                 if(!preg_match('#^.{1,50}$#', $country)){
-                    $errors['countryInvalid']=true;
+                    $errors['countryTrInvalid']=true;
                 }
 
                 if(!preg_match('#^.{1,150}$#', $price)){
@@ -889,7 +889,7 @@ public function order(Request $request, $tourId){
             //Si erreur
             if(isset($errors)){
                 //retour de la vu avec les erreurs
-                return $this->render('order.html.twig', ['errorsList'=>$errors, 'tour' => $tour, 'flights' => $flights, 'accommodations' => $$accommodations]);
+                return $this->render('order.html.twig', ['errorsList'=>$errors, 'tour' => $tour, 'flights' => $flights, 'accommodations' => $accommodations]);
             //Sinon  
             }else{
                 //Création d'un nouveau client dans la BDD
@@ -924,7 +924,11 @@ public function order(Request $request, $tourId){
                 $session->set('clientParticipate', $participate);
                 $session->set('clientGroupNbr', $groupNbr);
                 $session->set('tour', $tour);
-                $session->set('flights', $flights);
+                $n = 0;
+                foreach ($flights as $flight) {
+                   $session->set('flight' . $n++, $flight);
+                }
+                $session->set('flightsNumb', $n);
                 $session->set('accommodations', $accommodations);
 
                 //Retour de la vu avec les données renseigner pour confirmation
@@ -969,18 +973,20 @@ public function confirmOrder(Swift_Mailer $mailer){
     $clientParticipate = $session->get('clientParticipate');
     $clientGroupNbr = $session->get('clientGroupNbr');
     $clientTour = $session->get('tour');
-    $clientFlight = $session->get('flight');
+    $lightsNumb = $session->get('flightsNumb');
+    for($n=0; $n<$lightsNumb; $n++)
+        $clientFlights[] = $session->get('flight' . $n);
 
     //Crétion de l'email de confirmation
     $message = (new Swift_Message('Confirmation et récapitulatif de votre commande'))
                 ->setFrom($clientEmail)
                 ->setTo('monsite@gmail.com')
                 ->setBody(
-                    $this->renderView('emails/order-email.html.twig',['clientEmail'=>$clientEmail, 'clientFirstname' => $clientFirstname, 'clientLastname' => $clientLastname, 'clientCivility' => $clientCivility, 'clientAdress' => $clientAdress, 'clientParticipate' => $clientParticipate, 'clientGroupNbr' => $clientGroupNbr, 'tour' => $clientTour, 'flight' => $clientFlight]),
+                    $this->renderView('emails/order-email.html.twig',['clientEmail'=>$clientEmail, 'clientFirstname' => $clientFirstname, 'clientLastname' => $clientLastname, 'clientCivility' => $clientCivility, 'clientAdress' => $clientAdress, 'clientParticipate' => $clientParticipate, 'clientGroupNbr' => $clientGroupNbr, 'tour' => $clientTour, 'flights' => $clientFlights]),
                     'text/html'
                 )
                 ->addPart(
-                    $this->renderView('emails/order-email.txt.twig',['clientEmail'=>$clientEmail, 'clientFirstname' => $clientFirstname, 'clientLastname' => $clientLastname, 'clientCivility' => $clientCivility, 'clientAdress' => $clientAdress, 'clientParticipate' => $clientParticipate, 'clientGroupNbr' => $clientGroupNbr, 'tour' => $clientTour, 'flight' => $clientFlight]),
+                    $this->renderView('emails/order-email.txt.twig',['clientEmail'=>$clientEmail, 'clientFirstname' => $clientFirstname, 'clientLastname' => $clientLastname, 'clientCivility' => $clientCivility, 'clientAdress' => $clientAdress, 'clientParticipate' => $clientParticipate, 'clientGroupNbr' => $clientGroupNbr, 'tour' => $clientTour, 'flights' => $clientFlights]),
                     'text/plain'
                 )
                 ;

@@ -10,5 +10,10 @@ Votre nom: {{clientLastname}}
 Votre Email: {{clientEmail}}
 Votre Adresse: {{clientAdress}}
 Vous serez: {{clientGroupNbr}}
+Permettez à vos amis de suivre vos vol :
+{% for flight in flights %}
+    Suivi du vol {{ flight.getFlightNumber()|trim|e }}
+    http://localhost:8000/suivi-vol/{{ flight.getFlightNumber()|trim }}
+{% endfor %}
 Vos documents sont en pièce jointe de ce mail
 Nous vous souhaitons un bon voyage

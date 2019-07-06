@@ -19,6 +19,10 @@
 	<p>Votre Email: {{clientEmail}}</p>
 	<p>Votre Adresse: {{clientAdress}}</p>
     <p>Vous serez: {{clientGroupNbr}}</p>
+    <p>Permettez à vos amis de suivre vos vol</p>
+    {% for flight in flights %}
+        <a href="http://localhost:8000/suivi-vol/{{ flight.getFlightNumber()|trim }}">Suivi du vol {{ flight.getFlightNumber()|trim|e }}</a>
+    {% endfor %}
     <p>Vos documents sont en pièce jointe de ce mail</p>
     <p>Nous vous souhaitons un bon voyage</p>
 

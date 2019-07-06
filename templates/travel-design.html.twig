@@ -140,11 +140,11 @@
                             <p class="text-info">Veuillez spécifier le n° de téléphone</p>
                         {% endif %}
                         <div class="form-group">
-                            <label for="email">Email</label>
-                            <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                            <label for="emailAc">Email</label>
+                            <input type="email" class="form-control" id="emailAc" name="emailAc" placeholder="Email">
                         </div>
-                        {# Si l'erreur emailInvalid existe, alors affiche d'une erreur #}
-                        {% if errorsList.emailInvalid is defined %}
+                        {# Si l'erreur emailAcInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.emailAcInvalid is defined %}
                             <p class="text-info">Veuillez spécifier un email</p>
                         {% endif %}
                         <div class="form-group">
@@ -156,14 +156,14 @@
                             <p class="text-info">Veuillez spécifier une adresse (entre 1 et 100 caractères)</p>
                         {% endif %}
                         <div class="form-group">
-                            <label for="country">Pays</label><br />
-                            <select name="country" id="country">
+                            <label for="countryAc">Pays</label><br />
+                            <select name="countryAc" id="countryAc">
                                 {% for country in countries %}
                                     <option value="{{ country.country|e }}">{{ country.country|e }}</option>
                                 {% endfor %}
                             </select>
-                            {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
-                            {% if errorsList.countryInvalid is defined %}
+                            {# Si l'erreur countryAcInvalid existe, alors affiche d'une erreur #}
+                            {% if errorsList.countryAcInvalid is defined %}
                                 <p class="text-info">Veuillez sélectionner pays</p>
                             {% endif %}
                         </div>
@@ -204,21 +204,21 @@
                         <div class="row">
                             <div class="col-12 col-md-5">
                                 <div class="form-group">
-                                    <label for="departureDate">Date de départ yyyy-mm-dd</label>
-                                    <input type="date" class="form-control" id="departureDate" name="departureDate" placeholder="Date du vol">
+                                    <label for="departureDateTr">Date de départ yyyy-mm-dd</label>
+                                    <input type="date" class="form-control" id="departureDateTr" name="departureDateTr" placeholder="Date du vol">
                                 </div>
-                                {# Si l'erreur departureDateInvalid existe, alors affiche d'une erreur #}
-                                {% if errorsList.departureDateInvalid is defined %}
+                                {# Si l'erreur departureDateTrInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.departureDateTrInvalid is defined %}
                                     <p class="text-info">Veuillez spécifier la date de départ yyyy-mm-dd</p>
                                 {% endif %}
                             </div>
                             <div class="col-12 col-md-5">
                                 <div class="form-group">
-                                    <label for="arrivalDate">Date de retour yyyy-mm-dd</label>
-                                    <input type="date" class="form-control" id="arrivalDate" name="arrivalDate" placeholder="Date du vol">
+                                    <label for="arrivalDateTr">Date de retour yyyy-mm-dd</label>
+                                    <input type="date" class="form-control" id="arrivalDateTr" name="arrivalDateTr" placeholder="Date du vol">
                                 </div>
-                                {# Si l'erreur arrivalDateInvalid existe, alors affiche d'une erreur #}
-                                {% if errorsList.arrivalDateInvalid is defined %}
+                                {# Si l'erreur arrivalDateTrInvalid existe, alors affiche d'une erreur #}
+                                {% if errorsList.arrivalDateTrInvalid is defined %}
                                     <p class="text-info">Veuillez spécifier la date de retour yyyy-mm-dd</p>
                                 {% endif %}
                                 {# Si l'erreur datesInvalid existe, alors affiche d'une erreur #}
@@ -239,8 +239,8 @@
                             {# Indication pays #}
                             <div class="col-12 col-md-5">
                                 <div class="form-group">
-                                    <label for="country">Pays</label><br />
-                                    <select name="country" id="country">
+                                    <label for="countryTr">Pays</label><br />
+                                    <select name="countryTr" id="countryTr">
                                         {% for country in countries %}
                                             <option value="{{ country.country|e }}">{{ country.country|e }}</option>
                                         {% endfor %}
@@ -248,8 +248,8 @@
                                 </div>
                             </div>
                         </div>
-                        {# Si l'erreur countryInvalid existe, alors affiche d'une erreur #}
-                        {% if errorsList.countryInvalid is defined %}
+                        {# Si l'erreur countryTrInvalid existe, alors affiche d'une erreur #}
+                        {% if errorsList.countryTrInvalid is defined %}
                             <p class="text-info">Veuillez sélectionner un pays</p>
                         {% endif %}
                         {# Selection des vols #}

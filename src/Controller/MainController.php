@@ -588,19 +588,19 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 $group = $request->request->get('group');
                 $country = $request->request->get('countryTr');
                 $selFlights = $request->request->get('selFlights');
-                // Récupération des vols sous forme de tableau
+                // Récupération des vols sous forme de tableau si non null
                 if($selFlights !== "")
                     $selFlights = explode("/", $selFlights);
+                // Sinon tableu vide
                 else
                     $selFlights = [];
                 $selAccommodations = $request->request->get('selAccommodations');
-                // Récupération des hébergement sous forme de tableau
+                // Récupération des hébergement sous forme de tableau si non ull
                 if($selAccommodations !== "")
                     $selAccommodations = explode("/", $selAccommodations);
+                // Sinon tableu vide
                 else
                     $selAccommodations = [];
-dump($selFlights);
-dump($selAccommodations);
                 $price = $request->request->get('price');
                 $inputFile = $request->files->get('inputFile');
 

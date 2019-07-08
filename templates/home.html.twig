@@ -55,7 +55,7 @@
 						<h5 class="card-title mt-2">{{ tour.title }}</h5>
 						{# Voir comment afficher seulement le début (pb c'est en html)
 							<p style="color:red">{{ tour.description|purify }}</p>#}
-						<p class="card-text text-white">{{tour.price}} € </p>
+						<p class="card-text text-white">{{tour.price / 100.0 }} € </p>
 							<a href="{{ path('travelDetail', {id: tour.id}) }}" class="btn btn-dark btn-sm float-right">En savoir plus +</a>
 					</div>
 				</div>

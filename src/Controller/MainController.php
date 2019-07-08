@@ -48,7 +48,6 @@ public function home(){
             // on l'ajoute
             if (!in_array($rnd, $randomId)) {
                 $randomId[] = $rnd;
-                dump($rnd);
                 $randomTours[] = $tours[$rnd];
                 // Si on a trouvé $nbRand id, on sort de la boucle
                 if (count($randomTours) >= $nbRand)
@@ -57,7 +56,7 @@ public function home(){
         }
     }
     // Affiche les voyages sélectionnés aléatoirement
-    return $this->render('home.html.twig', ['tours' => $randomTours]);              
+    return $this->render('home.html.twig', ['tours' => $randomTours]);
 }
 /**
  * @Route("/personaliser-votre-voyage/", name="custom-travel")
@@ -324,7 +323,7 @@ public function flight ($flightid){
 */
 public function travelDesign(Request $request, FileUploader $fileUploader){
     // Taille maxi des fichiers images
-    $maxSize = 200000;
+    $maxSize = 500000;
     // Ce formulaire étant accessible uniquement en mode administrateur
     // il n'est pas nécéssaire d'utiliser de captcha
     // Si l'admin n'est pas connecté, on le redirige vers la page d'erreur 403
@@ -397,7 +396,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 if(!preg_match('#^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$#', $arrvDate)){
                     $errors['arrivalDateInvalid']=true;
                 }
-                if($deptDate >= $arrvDate){
+                if($deptDate > $arrvDate){
                     $errors['datesInvalid']=true;   
                 }
                 // Si aucune erreurs dans les données en entrée.
@@ -518,7 +517,7 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 $price = $request->request->get('price');
                 $inputFile = $request->files->get('inputFile');
                 // Bloc des verification des champs
-                if(!preg_match('#^.{1,50}$#', $title)){
+                if(!preg_match('#^.{1,255}$#', $title)){
                     $errors['titleInvalid']=true;
                 }
                 if(mb_strlen($description) > 65535){
@@ -856,8 +855,10 @@ public function confirmOrder(Swift_Mailer $mailer){
     $clientParticipate = $session->get('clientParticipate');
     $clientGroupNbr = $session->get('clientGroupNbr');
     $clientTour = $session->get('tour');
-    $lightsNumb = $session->get('flightsNumb');
-    for($n=0; $n<$lightsNumb; $n++)
+    $flightsNumb = $session->get('flightsNumb');
+    if ($flightsNumb < 1)
+        $clientFlights = "";
+    for($n=0; $n<$flightsNumb; $n++)
         $clientFlights[] = $session->get('flight' . $n);
     //Crétion de l'email de confirmation
     $message = (new Swift_Message('Confirmation et récapitulatif de votre commande'))

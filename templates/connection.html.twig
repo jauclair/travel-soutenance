@@ -1,44 +1,46 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Connexion{% endblock %}
-
+{% block stylesheets %}
+ <style>
+ .navbar{
+    background:#343A40;
+ }
+ </style>
+{% endblock %}
 {% block body %}
-
-<h1 class="text-center my-4">PAGE CONNEXION</h1>
+<br><br><br><br>
 <!-- Formulaire connexion de l'admin-->
-<div class="bloc">
     {# msg de succès #}
     {% if success is defined %}
         <p class="alert alert-success col-4 offset-4 text-center">Vous êtes bien connecté ! <a href="{{ path('home') }}">Cliquez ici pour poursuivre</a></p>
     {% else %}
-    <form id="formConnection" class="col-12 col-md-4 offset-md-4" method="POST" style="margin-bottom:  3% !important;">        
+    <form id="formConnection" class="col-12 col-md-6 offset-md-3" method="POST">        
         <div class="form-group">
-            <label for="exampleInputEmail1">Votre email</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="exemple@exemple.com" name="email">
-            <small id="emailHelp" class="form-text text-muted"></small>
+            <label for="email">Votre email</label>
+            <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="exemple@exemple.com" name="email">
+            {# msg d'erreur si email invalide #}
+            {% if errorsList.invalidEmail is defined %}
+                <p class="text-danger">Email invalide</p>
+            {% endif %}
+            {# msg d'erreur si l'admin n'existe pas #}
+            {% if errorsList.notExist is defined %}
+                <p class="text-danger">Compte inexistant</p>
+            {% endif %}
         </div>
-        {# msg d'erreur si email invalide #}
-        {% if errorsList.invalidEmail is defined %}
-            <p class="text-danger">Email invalide</p>
-        {% endif %}
-        {# msg d'erreur si l'admin n'existe pas #}
-        {% if errorsList.notExist is defined %}
-            <p class="text-danger">Compte inexistant</p>
-        {% endif %}
         <div class="form-group">
-            <label for="exampleInputPassword1">Mot de passe</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Mot de passe" name="password">
+            <label for="password">Mot de passe</label>
+            <input type="password" class="form-control" id="password" placeholder="Mot de passe" name="password">
+            {# msg d'erreur si mot de passe invalide #}
+            {% if errorsList.invalidPassword is defined %}
+                <p class="text-danger">Mot de passe invalide</p>
+            {% endif %}
+            {# msg d'erreur si le mot de passe n'est pas le même que celui en BDD #}
+            {% if errorsList.badPassword is defined %}
+                <p class="text-danger">Mauvais mot de passe</p>
+            {% endif %}
         </div>
-        {# msg d'erreur si mot de passe invalide #}
-        {% if errorsList.invalidPassword is defined %}
-            <p class="text-danger">Mot de passe invalide</p>
-        {% endif %}
-        {# msg d'erreur si le mot de passe n'est pas le même que celui en BDD #}
-        {% if errorsList.badPassword is defined %}
-            <p class="text-danger">Mauvais mot de passe</p>
-        {% endif %}
-        <button type="submit" class="btn btn-warning col-12">Connexion</button>
+        <button type="submit" class="btn btn-danger col-12" style="background:#A0001E;">Connexion</button>
     </form>
     {% endif %}
-</div>
 {% endblock %}

@@ -1,11 +1,18 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Déconnexion{% endblock %}
-
+{% block stylesheets %}
+ <style>
+ .navbar{
+    background:#343A40;
+ }
+ </style>
+ {% endblock %}
 {% block body %}
+<br><br><br><br>
 <div class="container">
     <h1 class="text-center my-4">Vous êtes déconnecter</h1>
-    <p class="alert alert-success col-4 offset-4 text-center"><a href="{{ path('connection') }}">Cliquez ici pour vous reconnecter</a></p>
+    <p class="alert alert-success col-4 offset-4 text-center"><a href="{{ path('connection') }}" class="text-dark">Cliquez ici pour vous reconnecter</a></p>
 </div>
 
 {% endblock %}

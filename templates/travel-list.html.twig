@@ -1,45 +1,57 @@
 {% extends "base.html.twig" %}
 
 {% block title %} Liste des voyages {% endblock %}
-
+{% block stylesheets %}
+ <style>
+ .navbar{
+    background:#343A40;
+ }
+ </style>
+{% endblock %}
 {% block body %}
-
-<div class="container">
-    <h1>Liste des voyages</h1>
+<br><br><br><br>
+{#
+<div id="carouselExampleSlidesOnly" class="carousel slide d-none d-sm-block" data-ride="carousel">
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img class="d-block w-100" src="{{ asset('img/chine.jpg') }}" alt="First slide">
+      <div class="carousel-caption d-none d-md-block">
+    		<h1>Chine</h1>
+		</div>
+    </div>
+  </div>
 </div>
-     {#--- debut de la div container #}    
-		<div class="container p-0">
-			 {#--- image d'un pays #}
-			<div class="row p-0">
-        		{#--- boucle qui nous permet d'afficher la liste des voyages d'un pays #}	
-				{% if tours is empty %}
-					<p class="alert bg-danger col-12 text-warning text-center">Aucun voyage pour ce pays</p>
-				{% else %}
-					{% for tour in tours %}
-						<div  class="col-12 col-md-6 px-4">
-							<div class="bloc" class="card col-12 my-2">
-									<img class="card-img-top" src="{{asset('img/tours/'~tour.image) }}" alt="image {{ tour.title }}">			
-								<div class="card-body mb-5">
-									<h4 class="card-title" style="text-align:center">{{ tour.title }}</h4>
-									<p class="card-text" style="color:red">{{tour.getCountry().getCountry()}} </p>
-									{# Voir comment afficher seulement le début (pb c'est en html)
-									<p style="color:red">{{ tour.description|purify }}</p>				 
-									#}
-									{# // Conversion des centimes en euro pour #}
-									<p class="card-text" style="color:red">{{tour.price / 100.0}}</p>
-									<p class="card-text" style="color:red">{{tour.getDepartureDate()|date("m/d/Y")}}</p>
-									<p class="card-text" style="color:red">{{tour.getArrivalDate|date("m/d/Y")}}</p>
-									<p class="card-text" style="color:red">{% if tour.getTravelerGroup() %}En groupe{% else %}Seul{% endif %}</p>
-									<a href="{{ path('travelDetail', {id: tour.id}) }}" class="btn btn-danger">En savoir plus +</a>
-								</div>
+<br>
+#}
+{#--- debut de la div container #}    
+<div class="container p-0">
+		{#--- image d'un pays #}
+	<div class="row p-0">
+		{#--- boucle qui nous permet d'afficher la liste des voyages d'un pays #}	
+		{% if tours is empty %}
+			<p class="alert col-12 text-white text-center" style="background:#A0001E;">Aucun voyage pour ce pays</p>
+		{% else %}
+			{% for tour in tours %}
+				<div  class="col-12 col-md-4 px-2">                
+					<div class="card-deck mt-5  mr-auto ml-auto">
+						<div class="card cardSet text-white">
+							<div class="card-body">
+								<img src="{{asset('img/tours/'~tour.image) }}" alt="image {{ tour.title }}" class="img-fluid" width="960" height="960">
+								<h5 class="card-title mt-2">{{ tour.title }}</h5>
+								{# Voir comment afficher seulement le début (pb c'est en html)
+									<p style="color:red">{{ tour.description|purify }}</p>#}
+								<p class="card-text text-white">{{tour.price}} € </p>
+									<a href="{{ path('travelDetail', {id: tour.id}) }}" class="btn btn-dark btn-sm float-right">En savoir plus +</a>
 							</div>
 						</div>
-					{% endfor %}
-				{% endif %}
-			</div>
-		</div>
-	
+					</div>
+				</div>
+			{% endfor %}
+		{% endif %}
+	</div>
+</div>
 {% endblock %}
+
 
 
 

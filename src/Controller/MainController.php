@@ -21,21 +21,15 @@ use \DateTime;
 use App\Service\FileUploader;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-
 class MainController extends AbstractController{
-
-
 /**
 * @Route("/", name="home")
 * Page d'accueil du site
 */
 public function home(){
-
     $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
-
     // On récupère la liste des voyages
     $tours = $tourRepo->findAll();
-
     // On récupère le nombre de voyages
     $max = count($tours) - 1;
     // Table des id aléatoires
@@ -43,7 +37,7 @@ public function home(){
     // Table des tours aléatoires
     $randomTours = [];
     // Nombre de tours aléatoire désirés
-    $nbRand = 4;
+    $nbRand = 6;
     if($max > $nbRand){
         // Selection aléatoire de $nbRand voyages
         // $nbRand*4 essais cars rand peut retouner plusieurs
@@ -62,18 +56,14 @@ public function home(){
             }
         }
     }
-
     // Affiche les voyages sélectionnés aléatoirement
-    return $this->render('home.html.twig', ['tours' => $tours]);              
+    return $this->render('home.html.twig', ['tours' => $randomTours]);              
 }
-
-
 /**
  * @Route("/personaliser-votre-voyage/", name="custom-travel")
  * Page de voyage personaliser
  */
 public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $recaptcha){
-
     //Si le formulaire a été cliqué
     if($request->isMethod('POST')){
     
@@ -96,15 +86,12 @@ public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $
             if(empty($country)){
                 $errors['invalidCountry'] = true;
             }
-
             if(empty($departureDate)){
                 $errors['invalidDepartureDate'] = true;
             }
-
             if(empty($returnDate)){
                 $errors['invalidReturnDate'] = true;
             }
-
             if(empty($groupNbr)){
                 $errors['invalidGroupNbr'] = true;
             }
@@ -112,15 +99,12 @@ public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $
             if(!preg_match('#^[0-9]+(\.[0-9]{2})?$#', $minPrice)){
                 $errors['invalidMinPrice'] = true;
             }
-
             if(!preg_match('#^\d{2,10}(?:\.\d{1,4})?$#', $maxPrice)){
                 $errors['invalidMaxPrice'] = true;
             }
-
             if(!preg_match('#^.{0,8000}$#', $message)){
                 $errors['invalideMessage'] = true;
             }
-
             if(!$recaptcha->isValid($recaptchaCode, $request->server->get('REMOTE_ADDR'))){
                 $errors['captchaInvalid'] = true;
             }
@@ -157,77 +141,60 @@ public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $
     //page par défaut 
     return $this->render('custom-travel.html.twig');
 }
-
 /**
 * @Route("/choisissez-votre-pays/{country}/", name="travel-list")
 * Page d'accueil du site
 */
 public function travelList($country){
-
     // On récupère le pays corespondant au paramètre $country dans la liste des pays de la BDD
     $countryRepo = $this->getDoctrine()->getRepository(Country::class);
     $country = $countryRepo->findOneByCountry($country);
-
     // Si la pays figure bien dans la bdd on récupére la liste des voyages correspondants
     if($country){
         // On récupère la liste des voyages correspondant au pays de la BDD
         $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
         $tours = $tourRepo->findByCountry($country);
-
         return $this->render('travel-list.html.twig', ['tours' => $tours]);
-
     } else {
         throw new NotFoundHttpException();
     }
-
     
 }
-
-
 /**
 * @Route("/connectez-vous/", name="connection")
 * Page de connexion admin
 */
 public function connection(Request $request){
-
     //Si l'admin est déjà connectée, on le redirige vers la page d'ajout de séjour
     $session = $this->get('session');
     if($session->has('account')){
         return $this->redirectToRoute('travel-design');
     }
-
     //Si le formulaire a été cliqué
     if($request->isMethod('POST')){
-
         //Recupération des données du formulaire avec l'objet $request
         $email = $request->request->get('email');
         $password = $request->request->get('password');
-
         //bloc des vérifs
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $errors['invalidEmail'] = true;
         }
-
         if(!preg_match('#^.{8,300}$#', $password)){
             $errors['invalidPassword'] = true;
         }
         
         //Si pas d'erreurs
         if(!isset($errors)){
-
             //Recherche l'admin avec son adresse email dans la BDD
             $adminRepo = $this->getDoctrine()->getRepository(Admin::class);
             $admin = $adminRepo->findOneByEmail($email);
             
             //Si l'admin a été trouvé, c'est que le compte existe
             if(!empty($admin)){
-
                 //Vérif si le mot de passe est bon 
             if(password_verify($password, $admin->getPassword())){
-
                     //Connexion de l'admin
                     $session->set('account', $admin);
-
                     //Si connexion réussit, on redirige vers la vue travel-design
                     return $this->redirectToRoute('travel-design');
                 
@@ -241,53 +208,41 @@ public function connection(Request $request){
                 $errors['notExist'] = true;
             }
         }
-
     }
-
     //Si erreurs, charge de la vue en lui envoyant ces erreurs en paramètre
     if(isset($errors)){
         return $this->render('connection.html.twig', array('errorsList' => $errors));
     }
-
     //Chargement de la vue par défaut (si pas d'erreurs et pas succès)
     return $this->render('connection.html.twig');
 }
-
 /**
  * @Route("/deconnexion/", name="logout")
  * Page de déconnexion
  */
 public function logout(){
-
     //Si l'admin n'est pas connecté, on le redirige vers la page de connexion
     $session = $this->get('session');
     if(!$session->has('account')){
         return $this->redirectToRoute('connection');
     }
-
     //Suppression de la variable account ce qui provoque la déconnexion de l'admin
     $session->remove('account');
-
     //Appel de la vue déconnexion qui affiche un msg indiquant la réussite de la déconnexion
     return $this->render('logout.html.twig');
-
 }
-
 /**
 * @Route("contactez-nous", name="contact")
 * Page du contact du site
 */
 public function contact(Request $request, Swift_Mailer $mailer, Recaptcha $recaptcha){
     
-
     if($request->isMethod('POST')){
-
         //recuperation des données POST
         $email = $request->request->get('email');
         $subject = $request->request->get('subject');
         $content = $request->request->get('message');
         $recaptchaCode = $request->request->get('g-recaptcha-response');
-
         //bloc des verification des champs
         if(!filter_var($email , FILTER_VALIDATE_EMAIL)){
             $errors['emailInvalid'] = true;
@@ -319,7 +274,6 @@ public function contact(Request $request, Swift_Mailer $mailer, Recaptcha $recap
                 )
             ;
             $mailer->send($message);
-
             $messagereceipt = (new Swift_Message('ASIADREAM: Votre mail a bien été receptionné'))
             ->setFrom('asiadream@gmail.com')
             ->setTo($email)
@@ -340,42 +294,30 @@ public function contact(Request $request, Swift_Mailer $mailer, Recaptcha $recap
     
     return $this->render('contact.html.twig');
 }
-
 /**
 * @Route("/sejour/{id}/", name="travelDetail")
 * Page du contact du site
 */
 public function travelDetail($id){
-
     // On récupère les details d'un voyage de la BDD
     $tourRepo = $this->getDoctrine()->getRepository(Tour::class);
-
     $tour = $tourRepo->findOneById($id);
-
     return $this->render('travel-detail.html.twig', ['tour' => $tour]);
 }
-
-
 /**
 * @Route("/donnez-votre-avis/", name="review")
 * Page du contact du site
 */
 public function review(Request $request){
-
     return $this->render('review.html.twig');
-
 }
-
-
 /**
 * @Route("suivi-vol/{flightid}/", name="flight", defaults={"flightid" =  0})
 * Page de suivi de vol (affichage d'une carte et positionnement gps d'un avion)
 */
 public function flight ($flightid){
-
     return $this->render('flight.html.twig', ['flightid' => $flightid]);
 }
-
 /**
 * @Route("ajout-voyage", name="travel-design")
 * Page administrateur pour ajouter un voyage
@@ -383,7 +325,6 @@ public function flight ($flightid){
 public function travelDesign(Request $request, FileUploader $fileUploader){
     // Taille maxi des fichiers images
     $maxSize = 200000;
-
     // Ce formulaire étant accessible uniquement en mode administrateur
     // il n'est pas nécéssaire d'utiliser de captcha
     // Si l'admin n'est pas connecté, on le redirige vers la page d'erreur 403
@@ -391,10 +332,8 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
     if(!$session->has('account')){
         throw new AccessDeniedHttpException('Vous devez être connecté');
     }
-
     // Valeurs retournées par le fomumlaire ou vide
     $content = $request->getContent();
-
     // Tableau des noms donnés aux boutons submit pour les discriminer
     $butNames = array(
                 "flight" => "addFlight",
@@ -402,19 +341,15 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 "tour" => "addTour",
                 "country" => "addCountry",
                 "admin" => "addAdmin");
-
     // Tableau des pays
     $adminRepo = $this->getDoctrine()->getRepository(Country::class);
     $countries = $adminRepo->findAll();
-
     // Tableau des vols
     $adminRepo = $this->getDoctrine()->getRepository(Flight::class);
     $flights = $adminRepo->findAll();
-
     // Tableau des hébergements
     $adminRepo = $this->getDoctrine()->getRepository(Accommodation::class);
     $accommodations = $adminRepo->findAll();
-
     // On est appelé par le formulaire
     if($request->isMethod('POST')){
         // On discrimine le formulaire
@@ -432,7 +367,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
         else{
             $form = "tour";
         }
-
         // Traitement du fomulaire qui a effectué un post
         switch ($form) {
             // ============== Cas du formulaire flight ===========================================
@@ -444,36 +378,28 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 $arrvAirp = $request->request->get('arrivalAirport');
                 $deptDate = $request->request->get('departureDate');
                 $arrvDate = $request->request->get('arrivalDate');
-
                 // Bloc des verification des champs
                 if(!preg_match('#^.{1,50}$#', $companyName)){
                     $errors['companyNameInvalid']=true;
                 }
-
                 if(!preg_match('#^.{1,50}$#', $flightNum)){
                     $errors['flightNumInvalid'] = true;
                 }
-
                 if(!preg_match('#^.{1,150}$#', $deptAirp)){
                     $errors['departureAirportInvalid'] = true;
                 }
-
                 if(!preg_match('#^.{1,150}$#', $arrvAirp)){
                     $errors['arrivalAirportInvalid']=true;
                 }
-
                 if(!preg_match('#([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$#', $deptDate)){
                     $errors['departureDateInvalid']=true;
                 }
-
                 if(!preg_match('#^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$#', $arrvDate)){
                     $errors['arrivalDateInvalid']=true;
                 }
-
                 if($deptDate >= $arrvDate){
                     $errors['datesInvalid']=true;   
                 }
-
                 // Si aucune erreurs dans les données en entrée.
                 if(!isset($errors)){
                     $adminRepo = $this->getDoctrine()->getRepository(Flight::class);
@@ -491,7 +417,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($flight);
                         $em->flush();
-
                         return $this->render('travel-design.html.twig', array('button' => $butNames,
                                                                     'countries' => $countries,
                                                                     'flights' => $flights,
@@ -502,7 +427,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                         $errors['flightNumAlready'] = true;
                     }
                 }
-
                 // Si des erreurs ont été commises, alors retour de la page de ajout-voyage avec le tableau des erreurs.
                 if(isset($errors)){
                     $errors['flightForm']=true;
@@ -512,7 +436,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                                                                         'accommodations' => $accommodations,
                                                                         'errorsList'=>$errors));
                 }
-
             // ============== Cas du formulaire accommodation ====================================
             case array_keys($butNames)[1]:
                 // Recuperation des données POST
@@ -521,28 +444,22 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 $email = $request->request->get('emailAc');
                 $address = $request->request->get('address');
                 $country = $request->request->get('countryAc');
-
                 // Bloc des verification des champs
                 if(!preg_match('#^.{1,50}$#', $name)){
                     $errors['nameInvalid']=true;
                 }
-
                 if(!filter_var($phone, FILTER_SANITIZE_NUMBER_INT)){
                     $errors['phoneInvalid'] = true;
                 }
-
                 if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
                     $errors['emailAcInvalid'] = true;
                 }
-
                 if(!preg_match('#^.{1,100}$#', $address)){
                     $errors['addressInvalid']=true;
                 }
-
                 if(!preg_match('#^.{1,50}$#', $country)){
                     $errors['countryAcInvalid']=true;
                 }
-
                 // Si aucune erreurs dans les données en entrée.
                 if(!isset($errors)){
                     $adminRepo = $this->getDoctrine()->getRepository(Accommodation::class);
@@ -559,7 +476,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($accommodation);
                         $em->flush();
-
                         return $this->render('travel-design.html.twig', array('button' => $butNames,
                                                                     'countries' => $countries,
                                                                     'flights' => $flights,
@@ -567,7 +483,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                                                                     'successAccommodation' => true));
                     }
                 }
-
                 // Si des erreurs ont été commises, alors retour de la page de ajout-voyage avec le tableau des erreurs.
                 if(isset($errors)){
                     $errors['accommodationForm']=true;
@@ -577,7 +492,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                                                                         'accommodations' => $accommodations,
                                                                         'errorsList'=>$errors));
                 }
-
             // ============== Cas du formulaire tour ============================================
             case array_keys($butNames)[2]:
                 // Recuperation des données POST
@@ -588,63 +502,58 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 $group = $request->request->get('group');
                 $country = $request->request->get('countryTr');
                 $selFlights = $request->request->get('selFlights');
-                // Récupération des vols sous forme de tableau
-                $selFlights = explode("/", $selFlights);
+                // Récupération des vols sous forme de tableau si non null
+                if($selFlights !== "")
+                    $selFlights = explode("/", $selFlights);
+                // Sinon tableu vide
+                else
+                    $selFlights = [];
                 $selAccommodations = $request->request->get('selAccommodations');
-                // Récupération des hébergement sous forme de tableau
-                $selAccommodations = explode("/", $selAccommodations);
+                // Récupération des hébergement sous forme de tableau si non ull
+                if($selAccommodations !== "")
+                    $selAccommodations = explode("/", $selAccommodations);
+                // Sinon tableu vide
+                else
+                    $selAccommodations = [];
                 $price = $request->request->get('price');
                 $inputFile = $request->files->get('inputFile');
-
                 // Bloc des verification des champs
                 if(!preg_match('#^.{1,50}$#', $title)){
                     $errors['titleInvalid']=true;
                 }
-
                 if(mb_strlen($description) > 65535){
                     $errors['descriptionInvalid'] = true;
                 }
-
                 if(!preg_match('#([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$#', $deptDate)){
                     $errors['departureDateTrInvalid']=true;
                 }
-
                 if(!preg_match('#^([12]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01]))$#', $arrvDate)){
                     $errors['arrivalDateTrInvalid']=true;
                 }
-
                 if($deptDate >= $arrvDate){
                     $errors['datesInvalid']=true;   
                 }
-
                 if($group !== null && $group !== "on"){
                     $errors['groupInvalid'] = true;
                 }
-
                 if(!preg_match('#^.{1,50}$#', $country)){
                     $errors['countryTrInvalid']=true;
                 }
-
                 if(count($selFlights) == 0){
                     $errors['flightInvalid']=true;
                 }
-
                 if(count($selAccommodations) == 0){
                     $errors['accommodationInvalid']=true;
                 }
-
                 if(!preg_match('#^.{1,50}$#', $country)){
                     $errors['countryTrInvalid']=true;
                 }
-
                 if(!preg_match('#^.{1,150}$#', $price)){
                     $errors['priceInvalid'] = true;
                 }
-
                 if($inputFile == null){
                     $errors['inputFileInvalid']=true;
                 }
-
                 // Si aucune erreur dans les données en entrée.
                 if(!isset($errors)){
                     // Test mime, taille et copie du fichier
@@ -667,19 +576,16 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                         $tour->setArrivalDate(new DateTime($arrvDate));
                         $tour->setTravelerGroup(intval($group));
                         $tour->setCountry($countryObj);
-
                         // Ajout des vols selectionnés
                         foreach ($selFlights as $flight){
                             $flightObj = $flightRepo->findOneByFlightNumber($flight);
                             $tour->addFlight($flightObj);
                         }
-
                         // Ajout des hébergements selectionnés
                         foreach ($selAccommodations as $accommodation){
                             $accommodObj = $accommodationRepo->findOneByName($accommodation);
                             $tour->addAccommodation($accommodObj);
                         }
-
                         $tour->setPrice($price);
                         $tour->setImage($fileName);
                         // Enregistrement en BDD
@@ -693,7 +599,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                                                                             'successTour' => true));
                     }
                 }
-
                 // Si des erreurs ont été commises, alors retour de la page de ajout-voyage avec le tableau des erreurs.
                 if(isset($errors)){
                     $errors['tourForm']=true;
@@ -704,17 +609,14 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                                                                         'maxSize' => $maxSize,
                                                                         'errorsList'=>$errors));
                 }
-
             // ============== Cas du formulaire country ==========================================
             case array_keys($butNames)[3]:
                 // Recuperation des données POST
                 $country = $request->request->get('country');
-
                 // Bloc des verification des champs
                 if(!preg_match('#^.{1,50}$#', $country)){
                     $errors['countryInvalid']=true;
                 }
-
                 // Si aucune erreurs dans les données en entrée.
                 if(!isset($errors)){
                     $adminRepo = $this->getDoctrine()->getRepository(Country::class);
@@ -747,19 +649,16 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                                                                         'accommodations' => $accommodations,
                                                                         'errorsList'=>$errors));
                 }
-
             // ============== Cas du formulaire admin ============================================
             case array_keys($butNames)[4]:
                 // Recuperation des données POST
                 $email = $request->request->get('email');
                 $password = $request->request->get('password');
                 $confirm = $request->request->get('confirm');
-
                 //bloc des vérifs
                 if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
                     $errors['invalidEmail'] = true;
                 }
-
                 if(!preg_match('#^.{8,300}$#', $password)){
                     $errors['invalidPassword'] = true;
                 }
@@ -769,7 +668,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 }
                 //Si pas d'erreurs
                 if(!isset($errors)){
-
                     //Recherche l'admin avec son adresse email dans la BDD
                     $adminRepo = $this->getDoctrine()->getRepository(Admin::class);
                     $admin = $adminRepo->findOneByEmail($email);
@@ -780,7 +678,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                         $adminObj =  new Admin();
                         $adminObj->setEmail($email);
                         $adminObj->setPassword(password_hash($password, PASSWORD_BCRYPT));
-
                         // Enregistrement en BDD
                         $em = $this->getDoctrine()->getManager();
                         $em->persist($adminObj);
@@ -796,7 +693,6 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                         $errors['emailAlready'] = true;
                     }
                 }
-
                 // Si des erreurs ont été commises, alors retour de la page de ajout-voyage avec le tableau des erreurs.
                 if(isset($errors)){
                     $errors['adminForm'] = true;
@@ -808,20 +704,17 @@ public function travelDesign(Request $request, FileUploader $fileUploader){
                 }
         }
     }
-
     // On est pas appelé par le formulaire
     return $this->render('travel-design.html.twig', array('button' => $butNames,
                                                         'countries' => $countries,
                                                         'flights' => $flights,
                                                         'accommodations' => $accommodations));
 }
-
 /**
  * @Route("/achat-voyage/{tourId}/", name="order")
  * Page d'achat d'un voyage 
  */
 public function order(Request $request, $tourId){
-
         //Si le formulaire a été cliqué
         if($request->isMethod('POST')){
             //recuperation des données POST
@@ -843,12 +736,10 @@ public function order(Request $request, $tourId){
             $tour = $tourRepo->findOneById($tourId);
             $flights = $tour->getFlight();
             $accommodations = $tour->getAccommodations();
-
             //bloc des vérifs
             if(is_bool($participate)){
                 $errors['invalidParticipate'] = true; 
             }
-
             if(empty($groupNbr)){
                 $errors['invalidGroupNbr'] = true;
             }
@@ -883,9 +774,6 @@ public function order(Request $request, $tourId){
             if(!preg_match('#^[0-9]{10}$#', $phone1)){
                 $errors['invalidPhone1'] = true;
             }
-            if(!preg_match('#^[0-9]{10}$#', $phone2)){
-                $errors['invalidPhone2'] = true;
-            }
             //Si erreur
             if(isset($errors)){
                 //retour de la vu avec les erreurs
@@ -912,7 +800,6 @@ public function order(Request $request, $tourId){
                 $em = $this->getDoctrine()->getManager();
                 $em->persist($newClient);
                 $em->flush();
-
                 //Création d'une session pour l'envoie de l'email de confirmation pour la commande
                 $session = $this->get('session');
                 //Ajout de variables dans la session
@@ -930,7 +817,6 @@ public function order(Request $request, $tourId){
                 }
                 $session->set('flightsNumb', $n);
                 $session->set('accommodations', $accommodations);
-
                 //Retour de la vu avec les données renseigner pour confirmation
                 return $this->render('order.html.twig', ['success'=> true, 'tour' => $tour, 'flights' => $flights, 'newClient' => $newClient]); 
             }
@@ -945,7 +831,6 @@ public function order(Request $request, $tourId){
             return $this->render('order.html.twig', ['tour' => $tour, 'flights' => $flights, 'accommodations' => $accommodations]);
         }
 }
-
 /**
  * @Route("/donner-banquaire/", name="bankData")
  * Page infos bancaire
@@ -954,7 +839,6 @@ public function bankData(){
      //Retour de la vu 
     return $this->render('bankData.html.twig');
 }
-
 /** 
  * @Route("/confirmation-commande/", name="confirmOrder")
  * Page confirmation de commande
@@ -963,7 +847,6 @@ public function confirmOrder(Swift_Mailer $mailer){
     
     //Récuperation de l'objet session
     $session = $this->get('session');
-
     //Récuperation des variables
     $clientEmail = $session->get('clientEmail');
     $clientFirstname = $session->get('clientFirstname');
@@ -976,7 +859,6 @@ public function confirmOrder(Swift_Mailer $mailer){
     $lightsNumb = $session->get('flightsNumb');
     for($n=0; $n<$lightsNumb; $n++)
         $clientFlights[] = $session->get('flight' . $n);
-
     //Crétion de l'email de confirmation
     $message = (new Swift_Message('Confirmation et récapitulatif de votre commande'))
                 ->setFrom($clientEmail)

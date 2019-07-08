@@ -1,8 +1,15 @@
 {% extends "base.html.twig" %}
 
 {% block title %}ajouter{% endblock %}
-
+{% block stylesheets %}
+ <style>
+ .navbar{
+    background:#343A40;
+ }
+ </style>
+{% endblock %}
 {% block body %}
+<br><br><br><br>
     <div class="container">
         <div class="row">
             <h1 class="col-12 text-center my-4">Créer un pays - Un vol - Un hébergement - Un voyage</h1>
@@ -106,7 +113,7 @@
                             </div>
                         </div>
                         <!-- name sur le bouton permet de discriminer le formulaire -->
-                        <button type="submit" class="btn btn-primary" name={{ button.flight }}>Ajouter un vol</button>
+                        <button type="submit" class="btn btn-primary" style="background:#A0001E;" name={{ button.flight }}>Ajouter un vol</button>
                     </fieldset>
                 </form>
             {% endif %}
@@ -168,7 +175,7 @@
                             {% endif %}
                         </div>
                         <!-- name sur le bouton permet de discriminer le formulaire -->
-                        <button type="submit" class="btn btn-primary" name={{ button.accommodation }}>Ajouter un hébergement</button>
+                        <button type="submit" class="btn btn-primary" style="background:#A0001E;" name={{ button.accommodation }}>Ajouter un hébergement</button>
                     </fieldset>
                 </form>
             {% endif %}
@@ -331,7 +338,7 @@
                             <p class="text-info">Veuillez sélectionner une image jpg ou png d'une taille maxi {{ maxSize }}</p>
                         {% endif %}
                         <!-- name sur le bouton permet de discriminer le formulaire -->
-                        <button type="submit" class="btn btn-primary" name={{ button.tour }}>Ajouter un voyage</button>
+                        <button type="submit" class="btn btn-primary" style="background:#A0001E;" name={{ button.tour }}>Ajouter un voyage</button>
                     </fieldset>
                 </form>
             {% endif %}
@@ -361,7 +368,7 @@
                         <p class="text-info">Ce pays est déja présent dans la base de données</p>
                     {% endif %}
                     {# name sur le bouton permet de discriminer le formulaire #}
-                    <button type="submit" class="btn btn-primary" name={{ button.country }}>Ajouter un pays</button>
+                    <button type="submit" class="btn btn-primary" style="background:#A0001E;" name={{ button.country }}>Ajouter un pays</button>
                 </fieldset>
             </form>
         {% endif %}
@@ -406,7 +413,7 @@
                         <p class="text-info">Confirmation différente</p>
                     {% endif %}
                     {# name sur le bouton permet de discriminer le formulaire #}
-                    <button type="submit" class="btn btn-primary" name={{ button.admin }}>Ajouter un administarteur</button>
+                    <button type="submit" class="btn btn-primary" style="background:#A0001E;" name={{ button.admin }}>Ajouter un administarteur</button>
                 </fieldset>
             </form>
         {% endif %}
@@ -423,11 +430,12 @@
               or errorsList.adminForm is defined
         %}
         <div class="col-12 col-md-6">
-            <a href="{{ app.request.uri }}"><button type="button" class="btn btn-info mt-4 mb-4">Recharger la page</button></a>
+            <a href="{{ app.request.uri }}"><button type="button" class="btn btn-info mt-4 mb-4" style="background:#A0001E;">Recharger la page</button></a>
         </div>
         {% endif %}
     </div>
-
+    </div>
+    </div>
     {% block javascripts %}
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
         <script type="text/javascript">

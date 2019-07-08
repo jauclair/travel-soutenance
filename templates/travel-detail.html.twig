@@ -1,38 +1,66 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Detail de Voyage{% endblock %}
-
-{% block body %}
-
-<div class="container">
-    <h1>PAGE SEJOUR</h1>
-</div>
-
-    {#--- debut de la div container #}
-	<div class="container">	
-		<div class="row pl-5">	           
-            <div  class="col-12 col-md-6 px-4">
-                {# Affichage du détail d'un voyage #}
-                <div class="bloc" class="card col-12 my-2">
-                    <img class="card-img-top" src="{{asset('img/tours/'~tour.image) }}" alt="image {{ tour.title }}">
-                    <div class="card-body mb-5">
-                        <h4 class="card-title" style="text-align:center">{{ tour.title }}</h4>
-                        <p class="card-text" style="color:red">{{tour.getCountry().getCountry()}}</p>
-                        <p style="color:red">{{tour.description|purify}}</p>
-                        {# // Conversion des centimes en euro pour #}
-                        <p class="card-text" style="color:red">{{tour.price / 100.0}} €</p>
-                        <p class="card-text" style="color:red">{{tour.getDepartureDate()|date("m/d/Y")}}</p>
-                        <p class="card-text" style="color:red">{{tour.getArrivalDate|date("m/d/Y")}}</p>
-                        <p class="card-text" style="color:red">{% if tour.getTravelerGroup() %}En groupe{% else %}{% endif %}</p>
-                        <a class="btn btn-primary" href="/achat-voyage/{{tour.getId()}}" role="button">Acheter</a>
-                    </div>
-                </div>
-            </div>          
-		</div>
-	</div>
-	
+{% block stylesheets %}
+ <style>
+ .navbar{
+    background:#343A40;
+ }
+ </style>
 {% endblock %}
-
-
-
-			
+{% block body %}
+<br><br><br><br>
+<section class="container mt-5">
+<div class="container">
+	<div class="d-flex flex-column flex-sm-row justify-content-center">
+		<h1 class="col-md-7 ml-2">{{ tour.title }}</h1>
+		<h2 class="col-md-5 ml-5 text-danger d-sm-none d-md-block" style="left: 340px !important;">{{tour.price / 100.0}} €</h2>
+	</div>
+</div>
+<div id="carouselExampleControls" class="carousel slide " data-ride="carousel">
+	<div class="carousel-inner">
+	    <div class="carousel-item active">
+	      <img class="d-block w-100" src="{{asset('img/tours/'~tour.image) }}" alt="image {{ tour.title }}">
+	    </div>
+	  </div>
+	  <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+	    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+	    <span class="sr-only">Previous</span>
+	  </a>
+	  <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+	    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+	    <span class="sr-only">Next</span>
+	  </a>
+	</div>
+<div class="container">
+	<div class="row">
+		<h2 class="text-danger">Votre voyage</h2>
+	</div>
+	<div class="row">
+		<!--DEBUT VILLE DE DEPART-->
+		<div>
+			<p>Ville de départ :</p>
+			<p>{{tour.getCountry().getCountry()}}</p>
+		</div>
+		<!--FIN VILLE DE DEPART-->
+		</div>
+	<!--DEBUT  DISPONIBILITES-->
+	<div class="row">
+		<p>Les disponibilités :</p>
+	</div>
+	<div class="row">
+		<p>{{tour.getDepartureDate()|date("m/d/Y")}} - {{tour.getArrivalDate|date("m/d/Y")}}</p>
+	</div>
+	<div class="row">
+		<p class="price d-md-none d-lg-block">{{tour.price}} € </p>
+	</div>
+</div>
+</div>
+<div class="text-justify mt-3">
+    <h2 class="text-danger">Description</h2>
+    <p>{{tour.description|purify}}</p>
+	{#<p class="card-text">Vous voyagerez {% if tour.getTravelerGroup() %}En groupe{% else %}{% endif %}</p>#}
+<a class="btn btn-dark btn-lg float-left text-danger" href="/achat-voyage/{{tour.getId()}}" role="button">Réserver</a>
+<br>
+</section>
+{% endblock %}

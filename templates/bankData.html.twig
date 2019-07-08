@@ -1,8 +1,15 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Banque{% endblock %}
-
+{% block stylesheets %}
+ <style>
+ .navbar{
+    background:#343A40;
+ }
+ </style>
+{% endblock %}
 {% block body %}
+<br><br><br><br>
 <h1>Cette page est un placeholder de la futur page des données banquaire récupérer avec les API</h1>
 <a href="{{path('confirmOrder')}}">Cliquez ici vous confirmer votre achat</a>
 {% endblock %}

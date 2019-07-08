@@ -1,59 +1,63 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Personnalisez votre voyage !{% endblock %}
-
+ {% block stylesheets %}
+ <style>
+ .navbar{
+    background:#343A40;
+ }
+ </style>
+ {% endblock %}
 {% block body %}
-
-<h1 class="text-center my-4">page personnalisé</h1>
-<div class="blok">
-    <div class="container">
+<br><br><br><br>
+ <div class="container">
         {# msg de succès #}
         {% if success is defined %}
             <p class="alert alert-success col-4 offset-4 text-center">Votre demande de séjour à bien été prise en compte, nous reviendrons auprès de vous par mail <a href="{{ path('home') }}">Cliquez ici pour voir nos autres voyages</a></p>
         {% else %}
-        <form method="POST" class="col-6 mr-auto ml-auto mb-3">
-            <div class="form-group w-100">
-                <label for="exampleInputEmail1">Votre Email :</label>
-                <input type="email"  class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email" placeholder="Email">
+        <form method="POST" class="col-12 col-md-6 offset-md-3 ">
+            <div class="form-group">
+                <label for="email">Votre Email :</label>
+                 <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+                {# msg d'erreur si email invalide #}
+                {% if errorsList.invalidEmail is defined %}
+                    <p class="text-danger">Email invalide</p>
+                {% endif %}
             </div>
-            {# msg d'erreur si email invalide #}
-            {% if errorsList.invalidEmail is defined %}
-                <p class="text-danger">Email invalide</p>
-            {% endif %}
-            <div class="form-group w-100">
-                <label for="exampleFormControlSelect1">Choisissez votre destination :</label>
-                <select class="form-control" id="exampleFormControlSelect1" name="country">
-                    <option selected value="">Pays...</option>
+            <div class="form-group">
+            <label class="my-1 mr-2" for="country">Choisissez votre destination :</label>
+                <select class="custom-select my-1 mr-sm-2" id="country" name="country">
+                    <option selected value="">Pays</option>
                     <option value="Japon">Japon</option>
                     <option value="Chine">Chine</option>
                     <option value="Inde">Inde</option>
                     <option value="Vietnam">Vietnam</option>
                     <option value="Coree">Corée du Sud</option>
                 </select>
-            </div>
-            {# msg d'erreur si pays pas sélectionner #}
-            {% if errorsList.invalidCountry is defined %}
-                <p class="text-danger">Veuillez sélectionner un pays</p>
-            {% endif %}
-            <div class="form-group w-100">
+                {# msg d'erreur si pays pas sélectionner #}
+                {% if errorsList.invalidCountry is defined %}
+                    <p class="text-danger">Veuillez sélectionner un pays</p>
+                {% endif %}
+            </div>   
+            <div class="form-group">
                 <label for="InputDateDeparture">Votre date de départ :</label>
-                <input type="date"  class="form-control" id="InputDateDeparture" name="departureDate"> 
+                <input type="date" class="form-control" id="InputDateDeparture" name="departureDate">
+                {# msg d'erreur si date de départ pas sélectionner #}
+                {% if errorsList.invalidDepartureDate is defined %}
+                    <p class="text-danger">Veuillez sélectionner une date de départ</p>
+                {% endif %}
             </div>
-            {# msg d'erreur si date de départ pas sélectionner #}
-            {% if errorsList.invalidDepartureDate is defined %}
-                <p class="text-danger">Veuillez sélectionner une date de départ</p>
-            {% endif %}
-            <div class="form-group w-100">
+            <div class="form-group">
                 <label for="InputDateReturn">Votre date de retour :</label>
-                <input type="date"  class="form-control" id="InputDateReturn" name="returnDate"> 
+                <input type="date" class="form-control" id="InputDateReturn" name="returnDate">
+                {# msg d'erreur si date de retour pas sélectionner #}
+                {% if errorsList.invalidReturnDate is defined %}
+                    <p class="text-danger">Veuillez sélectionner une date de retour</p>
+                {% endif %}
             </div>
-            {# msg d'erreur si date de retour pas sélectionner #}
-            {% if errorsList.invalidReturnDate is defined %}
-                <p class="text-danger">Veuillez sélectionner une date de retour</p>
-            {% endif %}
-            <div class="form-group w-100">
-                <label for="exampleFormControlSelect2">Choisissez le nombre de participants :</label>
-                <select class="form-control" id="exampleFormControlSelect2" name="groupNbr">
+            <div class="form-group">
+            <label class="my-1 mr-2" for="groupNbr">Choisissez le nombre de participants :</label>
+                <select class="custom-select my-1 mr-sm-2" id="groupNbr" name="groupNbr">
                     <option selected>1</option>
                     <option>2</option>
                     <option>3</option>
@@ -70,30 +74,30 @@
                     <option>14</option>
                     <option>15</option>
                 </select>
-            </div>
-            {# msg d'erreur si nombre de participants pas sélectionner #}
-            {% if errorsList.invalidGroupNbr is defined %}
-                <p class="text-danger">Veuillez sélectionner un nombre de participants</p>
-            {% endif %}
-            <div class="form-group w-100">
+                {# msg d'erreur si nombre de participants pas sélectionner #}
+                {% if errorsList.invalidGroupNbr is defined %}
+                    <p class="text-danger">Veuillez sélectionner un nombre de participants</p>
+                {% endif %}
+            </div>   
+            <div class="form-group">
                 <label for="MinimalPrice">Votre prix minimum:</label>
-                <input class="form-control" type="text" placeholder="ex: 500€" id="MinimalPrice" name="minPrice"> 
+                <input type="text" class="form-control" placeholder="ex: 500€" id="MinimalPrice" name="minPrice">
+                {# msg d'erreur si prix minimum pas renseigner #}
+                {% if errorsList.invalidMinPrice is defined %}
+                    <p class="text-danger">Veuillez renseigner un prix minimun</p>
+                {% endif %}
             </div>
-            {# msg d'erreur si prix minimum pas renseigner #}
-            {% if errorsList.invalidMinPrice is defined %}
-                <p class="text-danger">Veuillez renseigner un prix minimun</p>
-            {% endif %}
-            <div class="form-group w-100">
+            <div class="form-group">
                 <label for="MaximumPrice">Votre prix maximum:</label>
-                <input class="form-control" type="text" placeholder="ex: 2000€" id="MaximumPrice" name="maxPrice"> 
+                <input type="text" class="form-control" placeholder="ex: 2000€" id="MaximumPrice" name="maxPrice">
+                {# msg d'erreur si prix maximum pas renseigner #}
+                {% if errorsList.invalidMaxPrice is defined %}
+                    <p class="text-danger">Veuillez renseigner un prix maximum</p>
+                {% endif %}
             </div>
-            {# msg d'erreur si prix maximum pas renseigner #}
-            {% if errorsList.invalidMaxPrice is defined %}
-                <p class="text-danger">Veuillez renseigner un prix maximum</p>
-            {% endif %}
-            <div class="form-group w-100">
+            <div class="form-group">
                 <label for="ComplementaryInfo">Avez vous des informations supplémentaires à nous faire parvenir pour la recherche de votre voyage ?</label>
-                <textarea class="form-control" id="ComplementaryInfo" rows="3" name="message" placeholder="Message"></textarea>
+                <textarea class="form-control" id="ComplementaryInfo" name="message" placeholder="Message" rows="3"></textarea>
             </div>
             {# Incoporation du système de recaptcha et visualisation d'une erreur si il n'a pas été résolu #}
             <div class="g-recaptcha" data-sitekey="{{ recaptcha_public }}">
@@ -101,11 +105,10 @@
             {% if errorsList.captchaInvalid is defined %}
                 <p class="text-danger">Veuillez resoudre le Captcha</p>
             {% endif %}
-            <button type="submit" class="btn btn-danger">Envoyer</button>
-
+            <br>
+            <button type="submit" class="btn btn-danger" style="background:#A0001E;">Envoyer</button>
         </form>
-        {% endif %}
-    </div>
+    {% endif %}
 </div>
 {% endblock %}
 {# Bloc de script du Recaptcha #}

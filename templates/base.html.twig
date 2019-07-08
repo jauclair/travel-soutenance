@@ -13,134 +13,153 @@
         integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
     {% block stylesheets %}{% endblock %}
 </head>
-<body class="d-flex flex-column h-100">
-    <!-- debut du header -->
-    <header id="color">
-        <!-- debut de la nav-bar bootstrap -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-danger">
-            <img src="{{ asset('img/logo.jpg') }}" class="rounded-circle mr-2" alt="logo">
-            <a class="navbar-brand" href="{{ path('home') }}"><span id="logotext">AsiaDream</span></a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
-                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link{{ (actualPage == 'home') ? ' active' : '' }}"
-                            href="{{ path('home') }}">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link{{ (actualPage == 'custom-travel') ? ' active' : '' }}"
-                            href="{{ path('custom-travel') }}">Voyage Personnalisé</a>
-                    </li>
-
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ (actualPage == 'travel-list') ? ' active' : '' }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pays</a>
-                        <div class="dropdown-menu bg-danger" aria-labelledby="navbarDropdown">
-                            {% for country in datas.getCountries %}
-                                <a class="dropdown-item" href="{{path('travel-list', {country: country.country}) }}">{{ country.country }}</a>
-                            {% endfor %}
-                        </div>
-                    </li>
-                </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-warning my-2 my-sm-0" type="submit">Search</button>
-                </form>
-            </div>
-        </nav>
-    </header>
-
-    {% block body %}{% endblock %}
+<body>
+<!-- debut du header -->
+<header>
+<!-- debut de la nav-bar bootstrap -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top navbar-inverse">
+        <a class="navbar-brand" href="#">
+            <img src="{{ asset('img/logo3.png') }}" width="80" height="50" alt="logo">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav">
+            <li class="nav-item active">
+                <a class="nav-link text-white {{ (actualPage == 'home') ? ' active' : '' }}"
+                href="{{ path('home') }}">Accueil</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-white {{ (actualPage == 'custom-travel') ? ' active' : '' }}"
+                href="{{ path('custom-travel') }}">Voyage Personnalisé</a>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white {{ (actualPage == 'travel-list') ? ' active' : '' }}" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Pays</a>
+            <div class="dropdown-menu bg-dark" aria-labelledby="navbarDropdown">
+                {% for country in datas.getCountries %}
+                    <a class="dropdown-item bg-dark text-white" href="{{path('travel-list', {country: country.country}) }}">{{ country.country }}</a>
+                    {% endfor %}
+            <li class="nav-item">
+                <a class="nav-link text-white{{ (actualPage == 'contact') ? ' active' : '' }}"
+                href="{{ path('contact') }}">Contact</a>
+            </li>
+        </ul>
+    </div>
+    </nav>
+</header>
+{% block body %}{% endblock %}
 
     <!-- Footer -->
-    <footer class="page-footer font-small mdb-color bg-danger lighten-3 mt-auto">
-        <!-- Footer Links -->
-        <div class="container text-center text-md-left">
-            <!-- Grid row -->
-            <div class="row">
-                <!-- Grid column -->
-                <div class="col-md-4 col-lg-3 mr-auto my-md-4 my-0 mt-4 mb-1">
-                    <!-- Content -->
-                    <h5 class="font-weight-bold text-uppercase mb-4">Edité par :</h5>
-                    <p><strong>
-                            - Ameur Boubakar <br>
-                            - Kadi Mohamed <br>
-                            - Auclair Jérôme <br>
-                            - Dubois Manon <br>
-                            - Nicolas Jean-Marc
-                        </strong></p>
-                </div>
-                <!-- Grid column -->
-                <hr class="clearfix w-100 d-md-none">
-                <!-- Grid column -->
-                <!-- Grid column -->
-                <hr class="clearfix w-100 d-md-none">
-                <!-- Grid column -->
-                <div class="col-md-4 col-lg-3 mx-auto my-md-4 my-0 mt-4 mb-1">
-                    <!-- Contact details -->
-                    <h5 class="font-weight-bold text-uppercase mb-4">Address</h5>
-                    <ul class="list-unstyled">
-                        <li>
-                            <p><i class="fas fa-home mr-3"></i> 12 Rue de la Fonderie, Le Creusot</p>
-                        </li>
-                        <li>
-                            <p><i class="fas fa-envelope mr-3"></i> info@example.com</p>
-                        </li>
-                        <li>
-                            <p><i class="fas fa-phone mr-3"></i> + 01 23 45 67 88</p>
-                        </li>
-                    </ul>
-                </div>
-                <!-- Grid column -->
-                <hr class="clearfix w-100 d-md-none">
-                <!-- Grid column -->
-                <div class="col-md-2 col-lg-2 text-center mx-auto my-4">
-                    <!-- Social buttons -->
-                    <h5 class="font-weight-bold text-uppercase mb-4">Follow Us</h5>
-                    <!-- Facebook -->
-                    <a type="button" class="btn-floating btn-fb">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-                    <!-- Twitter -->
-                    <a type="button" class="btn-floating btn-tw">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                    <!-- Google +-->
-                    <a type="button" class="btn-floating btn-gplus">
-                        <i class="fab fa-google-plus-g"></i>
-                    </a>
-                    <!-- Dribbble -->
-                    <a type="button" class="btn-floating btn-dribbble">
-                        <i class="fab fa-dribbble"></i>
-                    </a> <br>
-                    {% if app.session.has('account') %}
-                    {# Si l'admin est connecter alors il voit le bouton deconnexion et ne voit plus le bouton connexion #}
-                    <li class="nav-item">
-                        <a id="deconnexion" class="nav-link{{ (actualPage == 'logout') ? ' active' : '' }}"
-                            href="{{ path('logout') }}">Déconnexion</a>
-                    </li>
-                    {% else %}
-                    {# Si l'admin est deconnecter  alors il voit le bouton connexion et ne voit plus le bouton déconnexion #}
-                    <li class="nav-item">
-                        <a id="connexion" class="nav-link{{ (actualPage == 'connection') ? ' active' : '' }}"
-                            href="{{ path('connection') }}">Connexion</a>
-                    </li>
-                    {% endif %}
-                    <li class="nav-item">
-                        <a class="nav-link{{ (actualPage == 'contact') ? ' active' : '' }}"
-                            href="{{ path('contact') }}">Contact</a>
-                    </li>
-                </div>
-                <!-- Grid column -->
-            </div>
-            <!-- Grid row -->
-        </div>
-        <!-- Footer Links -->
-    </footer>
-    <!-- Footer -->
+    <footer class="page-footer font-small mdb-color lighten-3 pt-4 bg-dark mt-5">
+
+    <!-- Footer Links -->
+    <div class="container text-center text-md-left">
+
+    <!-- Grid row -->
+    <div class="row">
+
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 mr-auto my-md-4 my-0 mt-4 mb-1">
+
+        <!-- Content -->
+        <h5 class="font-weight-bold text-uppercase mb-4 text-white">Edité par: </h5>
+        <p class="text-white">
+          <strong>
+          - Ameur Boubakar <br>
+          - Kadi Mohamed <br>
+          - Auclair Jérôme <br>
+          - Dubois Manon <br>
+          - Nicolas Jean-Marc
+          </strong>
+        </p>
+      </div>
+      <!-- Grid column -->
+
+      <hr class="clearfix w-100 d-md-none">
+      <!-- Grid column -->
+      <!-- Grid column -->
+      <hr class="clearfix w-100 d-md-none">
+      <!-- Grid column -->
+      <div class="col-md-4 col-lg-3 mx-auto my-md-4 my-0 mt-4 mb-1">
+
+
+    <!-- Contact details -->
+    <h5 class="font-weight-bold text-uppercase mb-4 text-white">Adresse</h5>
+
+    <ul class="list-unstyled text-white">
+        <li>
+        <p>
+            <i class="fas fa-home mr-3 text-white"></i>12 Rue de la Fonderie, Le Creusot</p>
+        </li>
+        <li>
+        <p>
+            <i class="fas fa-envelope mr-3 text-white"></i>info@example.com</p>
+        </li>
+        <li>
+        <p>
+            <i class="fas fa-phone mr-3 text-white"></i>+ 01 23 45 67 88</p>
+        </li>
+    </ul>
+
+    </div>
+    <!-- Grid column -->
+
+    <hr class="clearfix w-100 d-md-none">
+
+    <!-- Grid column -->
+    <div class="col-md-2 col-lg-2 text-center mx-auto my-4">
+
+    <!-- Social buttons -->
+    <h5 class="font-weight-bold text-uppercase mb-4 text-white">Suivez-nous</h5>
+
+    <!-- Facebook -->
+    <a type="button" class="btn-floating btn-fb">
+        <i class="fab fa-facebook-f" style="color:#A0001E;"></i>
+    </a>
+    <!-- Twitter -->
+    <a type="button" class="btn-floating btn-tw">
+        <i class="fab fa-twitter" style="color:#A0001E;"></i>
+    </a>
+    <!-- Google +-->
+    <a type="button" class="btn-floating btn-gplus">
+        <i class="fab fa-google-plus-g" style="color:#A0001E;"></i>
+    </a>
+    <!-- Dribbble -->
+    <a type="button" class="btn-floating btn-dribbble">
+        <i class="fab fa-dribbble" style="color:#A0001E;"></i>
+    </a><br>
+    {% if app.session.has('account') %}
+        {# Si l'admin est connecter alors il voit le bouton deconnexion et ne voit plus le bouton connexion #}
+        <li class="nav-item">
+            <a id="deconnexion" class="nav-link text-white{{ (actualPage == 'logout') ? ' active' : '' }}"
+                href="{{ path('logout') }}">Déconnexion</a>
+        </li>
+    {% else %}
+        {# Si l'admin est deconnecter  alors il voit le bouton connexion et ne voit plus le bouton déconnexion #}
+        <li class="nav-item">
+            <a id="connexion" class="nav-link text-white{{ (actualPage == 'connection') ? ' active' : '' }}"
+                href="{{ path('connection') }}">Connexion</a>
+        </li>
+    {% endif %}
+    </div>
+    <!-- Grid column -->
+
+    </div>
+    <!-- Grid row -->
+
+  </div>
+  <!-- Footer Links -->
+
+  <!-- Copyright -->
+  <div class="footer-copyright text-center py-3 text-white">© 2019 Copyright:
+    <a>AsiaDream</a>
+  </div>
+  <!-- Copyright -->
+
+</footer>
+<!-- Footer -->
+    
     {% block javascripts %}{% endblock %}
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -158,6 +177,11 @@
     #}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script src="{{ asset('js/scriptflights.js')}}" ></script>
+    {# script fonction scroll de la navbar#}
+    <script src="{{ asset('js/scriptnavbar.js')}}" ></script>
+    {# script carousel accueil#}
+    <script src="{{ asset('js/scriptcarousel.js')}}" ></script>
 </body>
 
 </html>
+

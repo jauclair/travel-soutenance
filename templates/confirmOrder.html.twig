@@ -1,8 +1,15 @@
 {% extends "base.html.twig" %}
 
 {% block title %}Confirmation commande{% endblock %}
-
+{% block stylesheets %}
+ <style>
+ .navbar{
+    background:#343A40;
+ }
+ </style>
+{% endblock %}
 {% block body %}
+<br><br><br><br>
 <h1>Votre commande est valider</h1>
 <p>Vous recevrez les détails de votre commande par email</p>
 <a href="{{path('home')}}">Retourner à l'accueil</a>

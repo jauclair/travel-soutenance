@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20190621092748 extends AbstractMigration
+final class Version20190706132459 extends AbstractMigration
 {
     public function getDescription() : string
     {
@@ -29,7 +29,8 @@ final class Version20190621092748 extends AbstractMigration
         $this->addSql('CREATE TABLE country (id INT AUTO_INCREMENT NOT NULL, country VARCHAR(50) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE flight (id INT AUTO_INCREMENT NOT NULL, company_name VARCHAR(50) NOT NULL, flight_number VARCHAR(50) NOT NULL, departure_airport VARCHAR(150) NOT NULL, arrival_airport VARCHAR(150) NOT NULL, departure_date DATE NOT NULL, arrival_date DATE NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE `order` (id INT AUTO_INCREMENT NOT NULL, client_id INT NOT NULL, tour_id INT NOT NULL, total_price INT NOT NULL, INDEX IDX_F529939819EB6921 (client_id), INDEX IDX_F529939815ED8D43 (tour_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE tour (id INT AUTO_INCREMENT NOT NULL, country_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, departure_date DATE NOT NULL, arrival_date DATE NOT NULL, traveler_group INT NOT NULL, price INT NOT NULL, INDEX IDX_6AD1F969F92F3E70 (country_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE review (id INT AUTO_INCREMENT NOT NULL, grade SMALLINT NOT NULL, review LONGTEXT DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE tour (id INT AUTO_INCREMENT NOT NULL, country_id INT NOT NULL, title VARCHAR(255) NOT NULL, description LONGTEXT NOT NULL, departure_date DATE NOT NULL, arrival_date DATE NOT NULL, traveler_group INT NOT NULL, price INT NOT NULL, image VARCHAR(50) NOT NULL, INDEX IDX_6AD1F969F92F3E70 (country_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE tour_flight (tour_id INT NOT NULL, flight_id INT NOT NULL, INDEX IDX_F7D901E415ED8D43 (tour_id), INDEX IDX_F7D901E491F478C5 (flight_id), PRIMARY KEY(tour_id, flight_id)) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE accommodation_tour ADD CONSTRAINT FK_63E93BA28F3692CD FOREIGN KEY (accommodation_id) REFERENCES accommodation (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE accommodation_tour ADD CONSTRAINT FK_63E93BA215ED8D43 FOREIGN KEY (tour_id) REFERENCES tour (id) ON DELETE CASCADE');
@@ -59,6 +60,7 @@ final class Version20190621092748 extends AbstractMigration
         $this->addSql('DROP TABLE country');
         $this->addSql('DROP TABLE flight');
         $this->addSql('DROP TABLE `order`');
+        $this->addSql('DROP TABLE review');
         $this->addSql('DROP TABLE tour');
         $this->addSql('DROP TABLE tour_flight');
     }

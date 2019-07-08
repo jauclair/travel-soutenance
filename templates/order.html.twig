@@ -13,7 +13,7 @@
 <!--Si succès, alors on affiche un recapitulatif à l'utilisateur lui permettant de decider si es informations sont juste ou non -->
 {% if success is defined %}
 <div class="container">
-	<p>Vous avez reserver le voyage "{{ tour.title }}"</p>
+	<p>Vous avez reservé le voyage "{{ tour.title }}"</p>
 	<p>Vous partez le {{tour.DepartureDate|date('d/m/Y')}}</p>
 	<p>Vous revenez le {{tour.ArrivalDate|date('d/m/Y')}}</p>
 	<p>Et vous payerez {{tour.price/100.0}}€</p>

@@ -28,11 +28,9 @@
             <label class="my-1 mr-2" for="country">Choisissez votre destination :</label>
                 <select class="custom-select my-1 mr-sm-2" id="country" name="country">
                     <option selected value="">Pays</option>
-                    <option value="Japon">Japon</option>
-                    <option value="Chine">Chine</option>
-                    <option value="Inde">Inde</option>
-                    <option value="Vietnam">Vietnam</option>
-                    <option value="Coree">Corée du Sud</option>
+                    {% for country in countries %}
+                        <option value="{{ country.country|e }}">{{ country.country|e }}</option>
+                    {% endfor %}
                 </select>
                 {# msg d'erreur si pays pas sélectionner #}
                 {% if errorsList.invalidCountry is defined %}

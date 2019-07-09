@@ -63,6 +63,10 @@ public function home(){
  * Page de voyage personaliser
  */
 public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $recaptcha){
+    // Tableau des pays
+    $adminRepo = $this->getDoctrine()->getRepository(Country::class);
+    $countries = $adminRepo->findAll();
+
     //Si le formulaire a été cliqué
     if($request->isMethod('POST')){
     
@@ -111,7 +115,7 @@ public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $
             //Si erreur
             if(isset($errors)){
                 //retour a la page custom-travel avec les erreurs 
-                return $this->render('custom-travel.html.twig', array('errorsList' => $errors));
+                return $this->render('custom-travel.html.twig', array('errorsList' => $errors, "countries" => $countries));
             
             //Sinon envoie du msg
             }else{    
@@ -133,12 +137,12 @@ public function customTravel(Request $request, Swift_Mailer $mailer, Recaptcha $
                 //Envoie du msg a l'admin
                 $mailer->send($message);
                 //retour de la page avec msg de succès
-                return $this->render('custom-travel.html.twig', array('success' => true));
+                return $this->render('custom-travel.html.twig', array('success' => true, "countries" => $countries));
             }
       
     } 
     //page par défaut 
-    return $this->render('custom-travel.html.twig');
+    return $this->render('custom-travel.html.twig', array("countries" => $countries));
 }
 /**
 * @Route("/choisissez-votre-pays/{country}/", name="travel-list")
